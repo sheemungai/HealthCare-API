@@ -1,0 +1,60 @@
+@url = http://localhost:3000
+
+
+//post users
+//doctor
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Dr. John Smith",
+  "email": "john@gmail.com",
+  "password": "password123",
+  "phone": "0789001234",
+  "role": "doctor"
+}
+
+
+//admin
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Alice Admin",
+  "email": "alice@gmail.com",
+  "password": "pass456",
+  "phone": "0722837412",
+  "role": "admin"
+}
+
+//patient
+### Create Patient User
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@gmail.com",
+  "password": "password789",
+  "phone": "0789323154",
+  "role": "patient"
+}
+
+//pharmacist
+####
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "Bob Pharmacist",
+  "email": "bob@gmail.com",
+  "password": "pharmacistpass",
+  "phone": "0712328334",
+  "role": "pharmacist"
+}
+
+###
+GET http://localhost:3000/users/1
+Accept: application/json
+Authorization: Bearer <token>
