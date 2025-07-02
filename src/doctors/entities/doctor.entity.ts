@@ -1,5 +1,13 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
-import { PrimaryGeneratedColumn, Column, Entity, OneToMany } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import {
+  PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Doctor {
@@ -24,6 +32,13 @@ export class Doctor {
   @Column()
   consultation_fee: number;
 
+  @Column()
+  user_id: number;
+
   @OneToMany(() => Appointment, (appointment) => appointment.doctor_id)
   appointments: Appointment[];
+
+  @OneToOne(() => User, (user) => user.doctor)
+  @JoinColumn()
+  user: User;
 }

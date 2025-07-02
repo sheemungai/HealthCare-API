@@ -1,9 +1,15 @@
-import { IsEmail, IsString, IsDate, IsNotEmpty } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  IsNotEmpty,
+  IsISO8601,
+  IsNumber,
+} from 'class-validator';
 
 export class CreatePatientDto {
   @IsString()
   @IsNotEmpty()
-  full_name: string;
+  name: string;
 
   @IsNotEmpty()
   @IsEmail()
@@ -14,7 +20,7 @@ export class CreatePatientDto {
   password: string;
 
   @IsNotEmpty()
-  @IsDate()
+  @IsISO8601()
   dob: Date;
 
   @IsString()
@@ -28,4 +34,8 @@ export class CreatePatientDto {
   @IsString()
   @IsNotEmpty()
   address: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  user_id: number; // This should be set by the service, not the DTO
 }

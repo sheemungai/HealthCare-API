@@ -1,9 +1,19 @@
-@url = http://localhost:3000
+@url = http://localhost:3000/api/v1
 
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxNDg1MDMwLCJleHAiOjE3NTE2NTc4MzB9.ASX2i2lxNttdMmH2plCL9N5nG6jfF9heqxAtERCqOVk
 
-//post users
-//doctor
-POST http://localhost:3000/users
+### Admin Login
+POST {{url}}/auth/signin
+Content-Type: application/json
+
+{
+  "email": "alice@gmail.com",
+  "password": "password456"
+}
+
+### Create Doctor User
+
+POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
@@ -17,20 +27,21 @@ Content-Type: application/json
 
 //admin
 ###
-POST http://localhost:3000/users
+POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
   "name": "Alice Admin",
   "email": "alice@gmail.com",
-  "password": "pass456",
+  "password": "password456",
   "phone": "0722837412",
   "role": "admin"
 }
 
+
 //patient
 ### Create Patient User
-POST http://localhost:3000/users
+POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
@@ -42,19 +53,49 @@ Content-Type: application/json
 }
 
 //pharmacist
-####
-POST http://localhost:3000/users
+### Create Pharmacist User
+POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
   "name": "Bob Pharmacist",
   "email": "bob@gmail.com",
-  "password": "pharmacistpass",
+  "password": "password012",
   "phone": "0712328334",
   "role": "pharmacist"
 }
 
 ###
-GET http://localhost:3000/users/1
-Accept: application/json
-Authorization: Bearer <token>
+GET http://localhost:3000/api/v1/patients/1
+Authorization: Bearer {{admin_token}}
+
+### Create Patient profile
+POST http://localhost:3000/api/v1/patients
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "email": "jane@gmail.com",
+  "password": "password789",
+  "dob": "1990-01-01T00:00:00.000Z",
+  "gender": "female",
+  "phone": "0789323154",
+ "address": "123 Main St, Nairobi",
+ "user_id": 2
+}
+
+//doctor
+### Create Doctor Profile
+POST http://localhost:3000/api/v1/patients
+Content-Type: application/json
+
+{
+  "name": "Dr. John Smith",
+  "email": "john@gmail.com",
+  "password": "password123",
+  "dob": "1985-05-15T00:00:00.000Z",
+  "gender": "male",
+  "phone": "0789001234",
+ "address": "123 Main St, Nairobi",
+ "user_id": 3
+}

@@ -1,6 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../enums/user-role.enum';
 import { Exclude } from 'class-transformer';
+import { Patient } from 'src/patients/entities/patient.entity';
+import { Doctor } from 'src/doctors/entities/doctor.entity';
 
 @Entity()
 export class User {
@@ -20,9 +22,19 @@ export class User {
   @Column()
   phone: string;
 
-  @Column({ type: 'enum', enum: Role, default: Role.Patient })
+  @Exclude()
+  @Column({ type: 'text', nullable: true, default: null })
+  hashedRefreshToken: string | null;
+
+  @Column({ type: 'enum', enum: Role, default: Role.admin })
   role: Role;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
+
+  @OneToOne(() => Patient, (patient) => patient.user)
+  patient: Patient;
+
+  @OneToOne(() => Doctor, (doctor) => doctor.user)
+  doctor: Doctor;
 }

@@ -4,13 +4,14 @@ import { PrescriptionsModule } from './prescriptions/prescriptions.module';
 import { MedicinesModule } from './medicines/medicines.module';
 import { RecordsModule } from './records/records.module';
 import { PatientsModule } from './patients/patients.module';
-import { PharmacyOrdersModule } from './pharmacy-orders/pharmacy-orders.module';
+import { PharmacyOrdersModule } from './pharmacy_orders/pharmacy-orders.module';
 import { PaymentsModule } from './payments/payments.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { DoctorsModule } from './doctors/doctors.module';
 import { DatabaseModule } from './database/database.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { ConfigModule } from '@nestjs/config';
     RecordsModule,
     MedicinesModule,
     PrescriptionsModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],

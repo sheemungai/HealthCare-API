@@ -1,5 +1,13 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
+} from 'typeorm';
 
 @Entity()
 export class Patient {
@@ -7,7 +15,7 @@ export class Patient {
   patient_id: number;
 
   @Column()
-  full_name: string;
+  name: string;
 
   @Column()
   email: string;
@@ -27,6 +35,13 @@ export class Patient {
   @Column()
   address: string;
 
+  @Column({ nullable: true })
+  user_id: number;
+
   @OneToMany(() => Appointment, (appointment) => appointment.patient)
   appointments: Appointment[];
+
+  @OneToOne(() => User, (user) => user.patient)
+  @JoinColumn()
+  user: User;
 }

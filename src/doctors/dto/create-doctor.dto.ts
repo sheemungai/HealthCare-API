@@ -24,4 +24,8 @@ export class CreateDoctorDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  user_id: number;
 }
