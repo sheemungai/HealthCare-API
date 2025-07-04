@@ -4,27 +4,42 @@ import { UpdatePatientDto } from './dto/update-patient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from './entities/patient.entity';
 import { Repository } from 'typeorm';
+import { UsersService } from 'src/users/users.service';
+import { Role } from 'src/users/enums/user-role.enum';
 
 @Injectable()
 export class PatientsService {
   constructor(
     @InjectRepository(Patient) private patientRepository: Repository<Patient>,
+    private readonly userService: UsersService, // Assuming you have a UserService to handle user-related operations
   ) {}
+
   async create(createPatientDto: CreatePatientDto) {
-    const patient = this.patientRepository.create(createPatientDto);
+    const user = await this.userService.findOne(createPatientDto.user_id);
+    if (!user) {
+      throw new Error('User not found');
+    }
+    if (user.role !== Role.patient) {
+      throw new Error('User is not a patient');
+    }
+    const patient = this.patientRepository.create({
+      ...createPatientDto,
+      user, // Assuming user_id is the foreign key in Patient entity
+    });
     return this.patientRepository.save(patient);
   }
 
   async findAll() {
-    const patients = await this.patientRepository.find();
-    return patients;
+    return this.patientRepository.find({
+      relations: ['user'],
+    });
   }
 
   async findOne(id: number) {
-    const patient = await this.patientRepository.findOne({
+    return this.patientRepository.findOne({
       where: { patient_id: id },
+      relations: ['user'],
     });
-    return patient;
   }
 
   async update(id: number, updatePatientDto: UpdatePatientDto) {
@@ -38,12 +53,6 @@ export class PatientsService {
   }
 
   async remove(id: number) {
-    const patient = await this.patientRepository.findOne({
-      where: { patient_id: id },
-    });
-    if (!patient) {
-      return 'Patient not found';
-    }
     return this.patientRepository.delete(id);
   }
 }

@@ -10,7 +10,9 @@ import {
 import { PharmacyOrdersService } from './pharmacy-orders.service';
 import { CreatePharmacyOrderDto } from './dto/create-pharmacy-order.dto';
 import { UpdatePharmacyOrderDto } from './dto/update-pharmacy-order.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('pharmacy-orders')
 @Controller('pharmacy-orders')
 export class PharmacyOrdersController {
   constructor(private readonly pharmacyOrdersService: PharmacyOrdersService) {}

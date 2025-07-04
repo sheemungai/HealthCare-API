@@ -1,101 +1,217 @@
 @url = http://localhost:3000/api/v1
 
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxNDg1MDMwLCJleHAiOjE3NTE2NTc4MzB9.ASX2i2lxNttdMmH2plCL9N5nG6jfF9heqxAtERCqOVk
-
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxNTk4MzgwLCJleHAiOjE3NTE3NzExODB9.8hYeansHX7acoMCO4CLNnvIKQ3pl5xi3rw7UUeL-gfE
+@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTc1MTYwMTg3NCwiZXhwIjoxNzUxNzc0Njc0fQ.ptqeKBLq-7NPnmxcYifCS7Edb597FOIi2-SvNoP5mLM
 ### Admin Login
 POST {{url}}/auth/signin
 Content-Type: application/json
 
 {
   "email": "alice@gmail.com",
-  "password": "password456"
+  "password": "Pass123"
 }
 
-### Create Doctor User
+### Patient Login
+POST {{url}}/auth/signin
+Content-Type: application/json
 
+{
+ "email": "john@gmail.com",
+  "password": "Pass101"
+}
+
+// Sample Users Creation
+
+### Create Admin User
 POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
-  "name": "Dr. John Smith",
-  "email": "john@gmail.com",
-  "password": "password123",
-  "phone": "0789001234",
-  "role": "doctor"
-}
-
-
-//admin
-###
-POST http://localhost:3000/api/v1/users
-Content-Type: application/json
-
-{
-  "name": "Alice Admin",
+  "name": "Alice Johnson",
   "email": "alice@gmail.com",
-  "password": "password456",
+  "password": "Pass123",
   "phone": "0722837412",
   "role": "admin"
 }
 
-
-//patient
-### Create Patient User
-POST http://localhost:3000/api/v1/users
-Content-Type: application/json
-
-{
-  "name": "Jane Doe",
-  "email": "jane@gmail.com",
-  "password": "password789",
-  "phone": "0789323154",
-  "role": "patient"
-}
-
-//pharmacist
 ### Create Pharmacist User
 POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
-  "name": "Bob Pharmacist",
+  "name": "Bob Mitchell",
   "email": "bob@gmail.com",
-  "password": "password012",
+  "password": "Pass456",
   "phone": "0712328334",
   "role": "pharmacist"
 }
 
-###
-GET http://localhost:3000/api/v1/patients/1
-Authorization: Bearer {{admin_token}}
+### Create Doctor 1
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
 
-### Create Patient profile
-POST http://localhost:3000/api/v1/patients
+{
+  "name": "Dr. Sarah Williams",
+  "email": "sarah@gmail.com",
+  "password": "Pass789",
+  "phone": "0789001001",
+  "role": "doctor"
+}
+
+
+
+### Create Patient 1
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "John Smith",
+  "email": "john@gmail.com",
+  "password": "Pass101",
+  "phone": "0711323001",
+  "role": "patient"
+}
+
+### Create Patient 2
+POST http://localhost:3000/api/v1/users
 Content-Type: application/json
 
 {
   "name": "Jane Doe",
   "email": "jane@gmail.com",
-  "password": "password789",
-  "dob": "1990-01-01T00:00:00.000Z",
-  "gender": "female",
-  "phone": "0789323154",
- "address": "123 Main St, Nairobi",
- "user_id": 2
+  "password": "Pass102",
+  "phone": "0711323002",
+  "role": "patient"
 }
 
-//doctor
-### Create Doctor Profile
+### Create Patient 3
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Robert Brown",
+  "email": "robert@gmail.com",
+  "password": "Pass103",
+  "phone": "0711323003",
+  "role": "patient"
+}
+
+### Create Patient 4
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Lisa Anderson",
+  "email": "lisa@gmail.com",
+  "password": "Pass104",
+  "phone": "0711323004",
+  "role": "patient"
+}
+
+### Create Patient 5
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Mark Johnson",
+  "email": "mark@gmail.com",
+  "password": "Pass105",
+  "phone": "0711323005",
+  "role": "patient"
+}
+
+### Create Patient 6
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Susan Miller",
+  "email": "susan@gmail.com",
+  "password": "Pass106",
+  "phone": "0711323006",
+  "role": "patient"
+}
+
+### Create Patient 7
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Kevin Garcia",
+  "email": "kevin@gmail.com",
+  "password": "Pass107",
+  "phone": "0711323007",
+  "role": "patient"
+}
+
+### Create Patient 8
+POST http://localhost:3000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Patricia Wilson",
+  "email": "patricia@gmail.com",
+  "password": "Pass108",
+  "phone": "0711323008",
+  "role": "patient"
+}
+
+### Get All Users(admin) 
+GET http://localhost:3000/api/v1/appointments
+Authorization: Bearer {{admin_token}}
+
+###
+GET http://localhost:3000/api/v1/apppointments
+Authorization: Bearer {{patient_token}}
+// Doctor Profile Creation
+
+### Create Doctor Profile 1
+POST http://localhost:3000/api/v1/doctors
+Content-Type: application/json
+
+{
+  "name": "Dr. Sarah Williams",
+  "email": "sarah@gmail.com",
+  "password": "Pass789",
+  "specialization": "Cardiology",
+  "license_number": "MD001234567",
+  "availability": "Monday-Friday 9:00AM-5:00PM",
+  "consultation_fee": 2500.00,
+  "user_id": 3
+}
+
+
+
+// Patient Profile Creation
+
+### Create Patient Profile 1
 POST http://localhost:3000/api/v1/patients
 Content-Type: application/json
 
 {
-  "name": "Dr. John Smith",
+  "name": "John Smith",
   "email": "john@gmail.com",
-  "password": "password123",
-  "dob": "1985-05-15T00:00:00.000Z",
-  "gender": "male",
-  "phone": "0789001234",
- "address": "123 Main St, Nairobi",
- "user_id": 3
+  "password": "Pass101",
+  "dob": "1990-05-15",
+  "gender": "Male",
+  "phone": "0711323001",
+  "address": "123 Main Street, Nairobi",
+  "user_id": 9
 }
+
+
+
+// Appointments Creation
+
+### Create Appointment 1
+POST http://localhost:3000/api/v1/appointments
+Content-Type: application/json
+
+{
+  "patient_id": 1,
+  "doctor_id": 1,
+  "appointment_time": "2025-07-08 10:00:00",
+  "status": "scheduled",
+  "reason": "Regular checkup and blood pressure monitoring"
+}
+

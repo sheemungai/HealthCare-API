@@ -1,4 +1,6 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
+import { Prescription } from 'src/prescriptions/entities/prescription.entity';
+import { Record } from 'src/records/entities/record.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   PrimaryGeneratedColumn,
@@ -13,6 +15,9 @@ import {
 export class Doctor {
   @PrimaryGeneratedColumn()
   doctor_id: number;
+
+  @Column()
+  name: string;
 
   @Column()
   email: string;
@@ -32,13 +37,16 @@ export class Doctor {
   @Column()
   consultation_fee: number;
 
-  @Column()
-  user_id: number;
-
   @OneToMany(() => Appointment, (appointment) => appointment.doctor_id)
   appointments: Appointment[];
 
   @OneToOne(() => User, (user) => user.doctor)
   @JoinColumn()
   user: User;
+
+  @OneToMany(() => Prescription, (prescription) => prescription.doctor)
+  prescriptions: Prescription[];
+
+  @OneToMany(() => Record, (record) => record.doctor)
+  records: Record[];
 }

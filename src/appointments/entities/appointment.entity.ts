@@ -1,11 +1,14 @@
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { Patient } from 'src/patients/entities/patient.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
+import { Prescription } from 'src/prescriptions/entities/prescription.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity()
@@ -38,4 +41,10 @@ export class Appointment {
   @ManyToOne(() => Patient, (patient) => patient.appointments)
   @JoinColumn({ name: 'patient_id' })
   patient: Patient;
+
+  @OneToOne(() => Prescription, (prescription) => prescription.appointment)
+  prescription: Prescription;
+
+  @OneToOne(() => Payment, (payment) => payment.appointment)
+  payment: Payment;
 }

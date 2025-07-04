@@ -17,13 +17,16 @@ export class AppointmentsService {
   }
 
   async findAll() {
-    const appointments = await this.appointmentRepository.find();
+    const appointments = await this.appointmentRepository.find({
+      relations: ['patient', 'doctor'],
+    });
     return appointments;
   }
 
   async findOne(id: number) {
     const appointment = await this.appointmentRepository.findOne({
       where: { appointment_id: id },
+      relations: ['patient', 'doctor'],
     });
     if (!appointment) {
       return 'appointment not found';

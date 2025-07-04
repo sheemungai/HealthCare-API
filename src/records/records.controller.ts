@@ -10,7 +10,9 @@ import {
 import { RecordsService } from './records.service';
 import { CreateRecordDto } from './dto/create-record.dto';
 import { UpdateRecordDto } from './dto/update-record.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('records')
 @Controller('records')
 export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}

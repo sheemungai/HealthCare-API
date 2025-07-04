@@ -35,13 +35,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @Roles(Role.admin)
+  @Roles(Role.admin, Role.doctor)
   @Get()
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Roles(Role.admin)
+  @Roles(Role.admin, Role.doctor)
   @ApiQuery({
     name: 'details',
     required: false,
