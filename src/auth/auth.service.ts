@@ -77,7 +77,12 @@ export class AuthService {
       foundUser.role,
     );
     await this.saveRefreshToken(foundUser.user_id, refreshToken);
-    return { accessToken, refreshToken };
+    return {
+      accessToken,
+      refreshToken,
+      user_id: foundUser.user_id,
+      role: foundUser.role,
+    };
   }
 
   async signOut(user_id: number) {

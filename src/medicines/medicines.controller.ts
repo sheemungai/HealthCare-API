@@ -35,11 +35,13 @@ export class MedicinesController {
     return this.medicinesService.findAll();
   }
 
+  @Roles(Role.admin, Role.pharmacist)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.medicinesService.findOne(+id);
   }
 
+  @Roles(Role.admin, Role.pharmacist)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -48,6 +50,7 @@ export class MedicinesController {
     return this.medicinesService.update(+id, updateMedicineDto);
   }
 
+  @Roles(Role.admin, Role.pharmacist)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.medicinesService.remove(+id);

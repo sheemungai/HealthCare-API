@@ -27,12 +27,9 @@ export class PharmacyOrder {
   quantity: number;
 
   @Column()
-  order_date: Date;
-
-  @Column()
   status: string;
 
-  @Column()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
   @ManyToOne(() => Patient, (patient) => patient.pharmacyOrders)

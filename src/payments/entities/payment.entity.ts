@@ -22,6 +22,9 @@ export class Payment {
   @Column()
   payment_method: string;
 
+  @Column()
+  pharmacy_order_id: number;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 

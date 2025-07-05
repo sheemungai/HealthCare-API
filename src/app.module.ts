@@ -12,7 +12,8 @@ import { DatabaseModule } from './database/database.module';
 import { LoggerMiddleware } from './logger.middleware';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { AtGuard } from './auth/guards';
 
 @Module({
   imports: [
@@ -39,7 +40,7 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
     AuthModule,
   ],
   controllers: [],
-  providers: [{ provide: 'APP_GUARD', useClass: ThrottlerGuard }],
+  providers: [{ provide: 'APP_GUARD', useClass: AtGuard }],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -29,9 +29,6 @@ export class Prescription {
   @Column()
   appointment_id: number;
 
-  @Column()
-  created_by: Date;
-
   @Column({ nullable: true })
   notes?: string;
 

@@ -1,9 +1,9 @@
-@url = http://localhost:3000/api/v1
+@url = http://localhost:8000/api/v1
 
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxNTk4MzgwLCJleHAiOjE3NTE3NzExODB9.8hYeansHX7acoMCO4CLNnvIKQ3pl5xi3rw7UUeL-gfE
-@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTc1MTYwMTg3NCwiZXhwIjoxNzUxNzc0Njc0fQ.ptqeKBLq-7NPnmxcYifCS7Edb597FOIi2-SvNoP5mLM
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxNjIwNDc0LCJleHAiOjE3NTE3OTMyNzR9.-bc7t7vqc-Fbfy6S92d-CeH48Q5RyXLn2YJfmnVT_s4
+@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTc1MTYxMTkzNSwiZXhwIjoxNzUxNzg0NzM1fQ.l2x9C8Wt1fc1ZQwcSitzBH9mJgEZdKv5d_QFtt9SxH4
 ### Admin Login
-POST {{url}}/auth/signin
+POST {{url}}/auth/login
 Content-Type: application/json
 
 {
@@ -32,6 +32,18 @@ Content-Type: application/json
   "password": "Pass123",
   "phone": "0722837412",
   "role": "admin"
+}
+
+### Create patient User
+POST http://localhost:8000/api/v1/users
+Content-Type: application/json
+
+{
+  "name": "Sheilla Mungai",
+  "email": "sheilla@gmail.com",
+  "password": "Pass100",
+  "phone": "0722837412",
+  "role": "patient"
 }
 
 ### Create Pharmacist User
@@ -157,11 +169,11 @@ Content-Type: application/json
 }
 
 ### Get All Users(admin) 
-GET http://localhost:3000/api/v1/appointments
+GET http://localhost:3000/api/v1/prescriptions
 Authorization: Bearer {{admin_token}}
 
 ###
-GET http://localhost:3000/api/v1/apppointments
+GET http://localhost:3000/api/v1/doctors
 Authorization: Bearer {{patient_token}}
 // Doctor Profile Creation
 
@@ -214,4 +226,18 @@ Content-Type: application/json
   "status": "scheduled",
   "reason": "Regular checkup and blood pressure monitoring"
 }
+
+
+### Create Prescription 1
+POST http://localhost:3000/api/v1/prescriptions
+Content-Type: application/json
+
+{
+  "patient_id": 1,
+  "doctor_id": 1,
+  "appointment_id": 1,
+  "notes": "Take medications as prescribed. Follow up in 2 weeks for blood pressure monitoring."
+}
+
+
 
