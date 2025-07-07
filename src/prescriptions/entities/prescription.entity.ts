@@ -36,15 +36,15 @@ export class Prescription {
   created_at: Date;
 
   @ManyToOne(() => Patient, (patient) => patient.prescriptions)
-  @JoinColumn({ name: 'patient_id' })
+  @JoinColumn()
   patient: Patient;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.prescriptions)
-  @JoinColumn({ name: 'doctor_id' })
+  @JoinColumn()
   doctor: Doctor;
 
   @OneToOne(() => Appointment, (appointment) => appointment.prescription)
-  @JoinColumn({ name: 'appointment_id' })
+  @JoinColumn()
   appointment: Appointment;
 
   @ManyToMany(() => Medicine, (medicine) => medicine.prescriptions)

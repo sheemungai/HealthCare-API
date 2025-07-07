@@ -26,7 +26,7 @@ export class Medicine {
   price: number;
 
   @Column()
-  expiry_date: Date;
+  expiry_date: string;
 
   @ManyToMany(() => Prescription, (prescription) => prescription.medicines)
   @JoinTable()

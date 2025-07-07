@@ -1,7 +1,7 @@
 @url = http://localhost:8000/api/v1
 
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxNjIwNDc0LCJleHAiOjE3NTE3OTMyNzR9.-bc7t7vqc-Fbfy6S92d-CeH48Q5RyXLn2YJfmnVT_s4
-@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTc1MTYxMTkzNSwiZXhwIjoxNzUxNzg0NzM1fQ.l2x9C8Wt1fc1ZQwcSitzBH9mJgEZdKv5d_QFtt9SxH4
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxOTEzMjQ0LCJleHAiOjE3NTIwODYwNDR9.m-yHD1ZWahic_mHthupnHn-Pf-nn7jNkfk_Cn-Oy_YM
+@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJlbWFpbCI6InNoZWlsbGFAZ21haWwuY29tIiwicm9sZSI6InBhdGllbnQiLCJpYXQiOjE3NTE5MTE0ODgsImV4cCI6MTc1MjA4NDI4OH0.LyzWUGE01YzyFeng4kBqBII1RinUlACkftTCXJ0JSbo
 ### Admin Login
 POST {{url}}/auth/login
 Content-Type: application/json
@@ -12,18 +12,19 @@ Content-Type: application/json
 }
 
 ### Patient Login
-POST {{url}}/auth/signin
+POST {{url}}/auth/login
 Content-Type: application/json
 
 {
- "email": "john@gmail.com",
-  "password": "Pass101"
+  "email": "sheilla@gmail.com",
+  "password": "Pass100"
 }
+
 
 // Sample Users Creation
 
 ### Create Admin User
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -47,7 +48,7 @@ Content-Type: application/json
 }
 
 ### Create Pharmacist User
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -59,7 +60,7 @@ Content-Type: application/json
 }
 
 ### Create Doctor 1
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -73,7 +74,7 @@ Content-Type: application/json
 
 
 ### Create Patient 1
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -85,7 +86,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 2
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -97,7 +98,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 3
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -109,7 +110,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 4
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -121,7 +122,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 5
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -133,7 +134,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 6
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -145,7 +146,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 7
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -157,7 +158,7 @@ Content-Type: application/json
 }
 
 ### Create Patient 8
-POST http://localhost:3000/api/v1/users
+POST http://localhost:8000/api/v1/users
 Content-Type: application/json
 
 {
@@ -169,16 +170,16 @@ Content-Type: application/json
 }
 
 ### Get All Users(admin) 
-GET http://localhost:3000/api/v1/prescriptions
+GET http://localhost:8000/api/v1/doctors 
 Authorization: Bearer {{admin_token}}
 
 ###
-GET http://localhost:3000/api/v1/doctors
+GET http://localhost:8000/api/v1/patients
 Authorization: Bearer {{patient_token}}
 // Doctor Profile Creation
 
 ### Create Doctor Profile 1
-POST http://localhost:3000/api/v1/doctors
+POST http://localhost:8000/api/v1/doctors
 Content-Type: application/json
 
 {
@@ -197,7 +198,7 @@ Content-Type: application/json
 // Patient Profile Creation
 
 ### Create Patient Profile 1
-POST http://localhost:3000/api/v1/patients
+POST http://localhost:8000/api/v1/patients
 Content-Type: application/json
 
 {
@@ -216,7 +217,7 @@ Content-Type: application/json
 // Appointments Creation
 
 ### Create Appointment 1
-POST http://localhost:3000/api/v1/appointments
+POST http://localhost:8000/api/v1/appointments
 Content-Type: application/json
 
 {
@@ -229,7 +230,7 @@ Content-Type: application/json
 
 
 ### Create Prescription 1
-POST http://localhost:3000/api/v1/prescriptions
+POST http://localhost:8000/api/v1/prescriptions
 Content-Type: application/json
 
 {
@@ -239,5 +240,197 @@ Content-Type: application/json
   "notes": "Take medications as prescribed. Follow up in 2 weeks for blood pressure monitoring."
 }
 
+### create post medicines
+POST http://localhost:8000/api/v1/medicines
+Content-Type: application/json
 
+{
+  "name": "Paracetamol",
+  "description": "Pain reliever and fever reducer",
+  "stock_quantity": 500,
+  "price": 5.00,
+  "expiry_date": "2025-12-31"
+}
+
+
+
+### Create Prescription 1 - Hypertension Treatment
+POST http://localhost:8000/api/v1/prescriptions
+Content-Type: application/json
+
+{
+  "patient_id": 1,
+  "doctor_id": 1,
+  "appointment_id": 1,
+  "notes": "Patient diagnosed with stage 1 hypertension. Prescribed ACE inhibitor and lifestyle modifications. Monitor blood pressure weekly. Follow-up in 2 weeks.",
+  "medicine_ids": [1, 6]
+}
+
+
+
+
+### Create Pharmacy Order 1 - Hypertension Medication
+POST http://localhost:8000/api/v1/pharmacy-orders
+Content-Type: application/json
+
+{
+  "patient_id": 1,
+  "medicine_id": 6,
+  "quantity": 30,
+  "status": "pending",
+  "medicine_ids": [1, 6]
+}
+
+
+
+### Create Payment 1 - Appointment Consultation Fee
+###
+
+POST http://localhost:8000/api/v1/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 1,
+  "patient_id": 1,
+  "payment_method": "credit_card",
+  "pharmacy_order_id": 1,
+  "amount": 4500.00,
+  "status": "completed"
+}
+
+### Create Payment 2 - Pharmacy Order Payment
+POST http://localhost:8000/api/v1/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 2,
+  "patient_id": 2,
+  "payment_method": "debit_card",
+  "pharmacy_order_id": 2,
+  "amount": 85.50,
+  "status": "completed"
+}
+
+### Create Payment 3 - Combined Service Payment
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 3,
+  "patient_id": 3,
+  "payment_method": "cash",
+  "pharmacy_order_id": 3,
+  "amount": 225.75,
+  "status": "pending"
+}
+
+### Create Payment 4 - Specialist Consultation
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 4,
+  "patient_id": 4,
+  "payment_method": "insurance",
+  "pharmacy_order_id": 4,
+  "amount": 300.00,
+  "status": "processing"
+}
+
+### Create Payment 5 - Prescription Medication
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 5,
+  "patient_id": 5,
+  "payment_method": "mobile_money",
+  "pharmacy_order_id": 5,
+  "amount": 45.25,
+  "status": "completed"
+}
+
+### Create Payment 6 - Follow-up Consultation
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 6,
+  "patient_id": 6,
+  "payment_method": "credit_card",
+  "pharmacy_order_id": 6,
+  "amount": 100.00,
+  "status": "completed"
+}
+
+### Create Payment 7 - Chronic Care Package
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 7,
+  "patient_id": 7,
+  "payment_method": "bank_transfer",
+  "pharmacy_order_id": 7,
+  "amount": 180.00,
+  "status": "pending"
+}
+
+### Create Payment 8 - Emergency Consultation
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 8,
+  "patient_id": 8,
+  "payment_method": "credit_card",
+  "pharmacy_order_id": 8,
+  "amount": 250.00,
+  "status": "failed"
+}
+
+### Create Payment 9 - Bulk Medication Order
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 9,
+  "patient_id": 1,
+  "payment_method": "debit_card",
+  "pharmacy_order_id": 9,
+  "amount": 320.50,
+  "status": "completed"
+}
+
+### Create Payment 10 - Comprehensive Care
+POST {{url}}/payments
+Content-Type: application/json
+
+{
+  "appointment_id": 10,
+  "patient_id": 2,
+  "payment_method": "insurance",
+  "pharmacy_order_id": 10,
+  "amount": 450.00,
+  "status": "processing"
+}
+
+
+
+
+
+
+
+### Create Medical Record
+
+POST http://localhost:8000/api/v1/records
+Content-Type: application/json
+Authorization: Bearer {{admin_token}}
+
+{
+  "patient_id": 1,
+  "doctor_id": 1,
+  "prescription_id": 1,
+  "description": "Patient follow-up for hypertension treatment. Blood pressure readings improved from 160/95 to 140/85. Patient reports better adherence to medication regimen. Recommended continued ACE inhibitor therapy and dietary modifications."
+}
 

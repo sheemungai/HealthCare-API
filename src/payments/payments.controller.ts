@@ -12,7 +12,7 @@ import { PaymentsService } from './payments.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Public, Roles } from 'src/auth/decorators';
+import { Roles } from 'src/auth/decorators';
 import { Role } from 'src/users/enums/user-role.enum';
 import { AtGuard, RolesGuard } from 'src/auth/guards';
 
@@ -23,7 +23,6 @@ import { AtGuard, RolesGuard } from 'src/auth/guards';
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
 
-  @Public()
   @Roles(Role.admin, Role.doctor, Role.patient, Role.pharmacist)
   @Post()
   create(@Body() createPaymentDto: CreatePaymentDto) {

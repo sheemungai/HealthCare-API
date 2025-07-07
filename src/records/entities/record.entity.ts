@@ -24,6 +24,9 @@ export class Record {
   @Column()
   prescription_id: number;
 
+  @Column()
+  description: string;
+
   @CreateDateColumn()
   created_at: Date;
 

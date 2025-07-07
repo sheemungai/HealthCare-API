@@ -37,7 +37,7 @@ export class PharmacyOrder {
   patient: Patient;
 
   @OneToOne(() => Payment, (payment) => payment.pharmacyOrder)
-  @JoinColumn({ name: 'payment_id' })
+  @JoinColumn()
   payment: Payment;
 
   @ManyToMany(() => Medicine, (medicine) => medicine.pharmacyOrders)

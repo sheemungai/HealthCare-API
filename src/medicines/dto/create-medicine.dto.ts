@@ -1,12 +1,12 @@
-import { IsNotEmpty, IsNumber, IsString, IsDate } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class CreateMedicineDto {
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   description: string;
 
   @IsNotEmpty()
@@ -18,6 +18,6 @@ export class CreateMedicineDto {
   price: number;
 
   @IsNotEmpty()
-  @IsDate()
-  expiry_date: Date;
+  @IsString()
+  expiry_date: string;
 }

@@ -35,10 +35,10 @@ export class Payment {
   status: string;
 
   @OneToOne(() => Appointment, (appointment) => appointment.payment)
-  @JoinColumn({ name: 'appointment_id' })
+  @JoinColumn()
   appointment: Appointment;
 
   @OneToOne(() => PharmacyOrder, (pharmacyOrder) => pharmacyOrder.payment)
-  @JoinColumn({ name: 'pharmacy_order_id' })
+  @JoinColumn()
   pharmacyOrder: PharmacyOrder;
 }

@@ -46,12 +46,6 @@ export class PrescriptionsService {
   }
 
   async remove(id: number) {
-    const prescription = await this.prescriptionRepository.findOne({
-      where: { prescription_id: id },
-    });
-    if (!prescription) {
-      return 'Prescription not found';
-    }
-    return this.prescriptionRepository.delete(prescription.prescription_id);
+    return this.prescriptionRepository.delete(id);
   }
 }
