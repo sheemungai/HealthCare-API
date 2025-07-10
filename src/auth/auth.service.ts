@@ -78,10 +78,16 @@ export class AuthService {
     );
     await this.saveRefreshToken(foundUser.user_id, refreshToken);
     return {
-      accessToken,
-      refreshToken,
-      user_id: foundUser.user_id,
-      role: foundUser.role,
+      token: {
+        accessToken,
+        refreshToken,
+      },
+
+      user: {
+        user_id: foundUser.user_id,
+        email: foundUser.email,
+        role: foundUser.role,
+      },
     };
   }
 

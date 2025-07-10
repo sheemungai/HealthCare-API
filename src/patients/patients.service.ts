@@ -31,7 +31,13 @@ export class PatientsService {
 
   async findAll() {
     return this.patientRepository.find({
-      relations: ['user'],
+      relations: {
+        user: true,
+        prescriptions: true,
+        pharmacyOrders: true,
+        appointments: true,
+        records: true,
+      },
     });
   }
 

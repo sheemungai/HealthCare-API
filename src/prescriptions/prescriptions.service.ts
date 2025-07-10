@@ -34,6 +34,17 @@ export class PrescriptionsService {
     return prescription;
   }
 
+  async findPatients(id: number) {
+    const prescription = await this.prescriptionRepository.find({
+      where: { patient_id: id },
+      relations: ['patient'],
+    });
+    if (!prescription) {
+      return 'Prescription not found';
+    }
+    return prescription;
+  }
+
   async update(id: number, updatePrescriptionDto: UpdatePrescriptionDto) {
     const prescription = await this.prescriptionRepository.findOne({
       where: { prescription_id: id },

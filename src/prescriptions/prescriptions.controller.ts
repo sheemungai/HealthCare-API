@@ -42,6 +42,12 @@ export class PrescriptionsController {
   }
 
   @Roles(Role.admin, Role.doctor)
+  @Get(':id/patients')
+  findPatients(@Param('id') id: string) {
+    return this.prescriptionsService.findPatients(+id);
+  }
+
+  @Roles(Role.admin, Role.doctor)
   @Patch(':id')
   update(
     @Param('id') id: string,

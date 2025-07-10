@@ -1,6 +1,6 @@
 @url = http://localhost:8000/api/v1
 
-@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUxOTEzMjQ0LCJleHAiOjE3NTIwODYwNDR9.m-yHD1ZWahic_mHthupnHn-Pf-nn7jNkfk_Cn-Oy_YM
+@admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMDU0MzU5LCJleHAiOjE3NTIyMjcxNTl9.cqgCA_9uyxiwj8EUtwcljbnkBBuy4B0F-KYfOWLRzRU
 @patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJlbWFpbCI6InNoZWlsbGFAZ21haWwuY29tIiwicm9sZSI6InBhdGllbnQiLCJpYXQiOjE3NTE5MTE0ODgsImV4cCI6MTc1MjA4NDI4OH0.LyzWUGE01YzyFeng4kBqBII1RinUlACkftTCXJ0JSbo
 ### Admin Login
 POST {{url}}/auth/login
@@ -169,14 +169,24 @@ Content-Type: application/json
   "role": "patient"
 }
 
+
 ### Get All Users(admin) 
-GET http://localhost:8000/api/v1/doctors 
+GET http://localhost:8000/api/v1/prescriptions/1/patients
 Authorization: Bearer {{admin_token}}
 
+
+###
+
+GET http://localhost:8000/api/v1/patients/id/prescriptions
+Authorization: Bearer {{patient_token}}
 ###
 GET http://localhost:8000/api/v1/patients
 Authorization: Bearer {{patient_token}}
 // Doctor Profile Creation
+
+###
+GET http://localhost:8000/api/v1/prescription/1/patients
+Authorization: Bearer {{admin_token}}
 
 ### Create Doctor Profile 1
 POST http://localhost:8000/api/v1/doctors

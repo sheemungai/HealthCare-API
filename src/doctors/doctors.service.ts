@@ -31,7 +31,7 @@ export class DoctorsService {
 
   async findAll() {
     const doctors = await this.doctorRepository.find({
-      relations: ['user'],
+      relations: ['user', 'appointments'],
     });
     return doctors;
   }
@@ -39,7 +39,7 @@ export class DoctorsService {
   async findOne(id: number) {
     return this.doctorRepository.findOne({
       where: { doctor_id: id },
-      relations: ['user'],
+      relations: ['user', 'appointments'],
     });
   }
 

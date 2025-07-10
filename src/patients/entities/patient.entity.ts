@@ -46,6 +46,7 @@ export class Patient {
   user: User;
 
   @OneToMany(() => Prescription, (prescription) => prescription.patient)
+  @JoinColumn()
   prescriptions: Prescription[];
 
   @OneToMany(() => PharmacyOrder, (pharmacyOrder) => pharmacyOrder.patient)

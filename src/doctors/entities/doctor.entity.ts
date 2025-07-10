@@ -37,7 +37,7 @@ export class Doctor {
   @Column()
   consultation_fee: number;
 
-  @OneToMany(() => Appointment, (appointment) => appointment.doctor_id)
+  @OneToMany(() => Appointment, (appointment) => appointment.doctor)
   appointments: Appointment[];
 
   @OneToOne(() => User, (user) => user.doctor)
@@ -45,6 +45,7 @@ export class Doctor {
   user: User;
 
   @OneToMany(() => Prescription, (prescription) => prescription.doctor)
+  @JoinColumn()
   prescriptions: Prescription[];
 
   @OneToMany(() => Record, (record) => record.doctor)

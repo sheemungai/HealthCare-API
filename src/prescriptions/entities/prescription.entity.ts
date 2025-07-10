@@ -36,7 +36,6 @@ export class Prescription {
   created_at: Date;
 
   @ManyToOne(() => Patient, (patient) => patient.prescriptions)
-  @JoinColumn()
   patient: Patient;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.prescriptions)

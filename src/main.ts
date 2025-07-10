@@ -44,7 +44,7 @@ async function bootstrap() {
       .addTag('pharmacy-orders', 'Pharmacy orders management endpoints')
       .addTag('prescriptions', 'Prescription management endpoints')
       .addTag('records', 'Records management endpoints')
-      .addServer('http://localhost:3000/', 'Local development server')
+      .addServer('http://localhost:8000/', 'Local development server')
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
