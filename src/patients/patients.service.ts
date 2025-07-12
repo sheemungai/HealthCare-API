@@ -6,11 +6,13 @@ import { Patient } from './entities/patient.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from 'src/users/users.service';
 import { Role } from 'src/users/enums/user-role.enum';
+import { Doctor } from 'src/doctors/entities/doctor.entity';
 
 @Injectable()
 export class PatientsService {
   constructor(
     @InjectRepository(Patient) private patientRepository: Repository<Patient>,
+    @InjectRepository(Doctor) private doctorsRepository: Repository<Doctor>,
     private readonly userService: UsersService, // Assuming you have a UserService to handle user-related operations
   ) {}
 
@@ -39,6 +41,10 @@ export class PatientsService {
         records: true,
       },
     });
+  }
+
+  async findDoctors() {
+    return this.doctorsRepository.find({});
   }
 
   async findOne(id: number) {

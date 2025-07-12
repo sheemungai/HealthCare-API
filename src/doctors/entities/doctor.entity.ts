@@ -31,6 +31,9 @@ export class Doctor {
   @Column()
   license_number: string;
 
+  @Column({ nullable: true })
+  img: string;
+
   @Column()
   availability: string;
 

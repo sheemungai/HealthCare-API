@@ -23,6 +23,10 @@ export class CreateDoctorDto {
 
   @IsString()
   @IsNotEmpty()
+  img: string;
+
+  @IsString()
+  @IsNotEmpty()
   password: string;
 
   @IsNumber()
