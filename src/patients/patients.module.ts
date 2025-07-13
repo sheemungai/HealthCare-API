@@ -6,11 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Appointment } from 'src/appointments/entities/appointment.entity';
 import { User } from 'src/users/entities/user.entity';
 import { UsersModule } from 'src/users/users.module';
+import { Medicine } from 'src/medicines/entities/medicine.entity';
+import { Doctor } from 'src/doctors/entities/doctor.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Patient, User, Appointment]),
-    UsersModule, // Import UsersModule to access User entity`
+    TypeOrmModule.forFeature([Patient, User, Appointment, Medicine, Doctor]),
+    UsersModule, // Import UsersModule to access User entity
   ],
   controllers: [PatientsController],
   providers: [PatientsService],

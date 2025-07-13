@@ -6,19 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
 } from '@nestjs/common';
 import { MedicinesService } from './medicines.service';
 import { CreateMedicineDto } from './dto/create-medicine.dto';
 import { UpdateMedicineDto } from './dto/update-medicine.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { AtGuard, RolesGuard } from 'src/auth/guards';
-import { Public, Roles } from 'src/auth/decorators';
-import { Role } from 'src/users/enums/user-role.enum';
+import { Public } from 'src/auth/decorators';
 
 @ApiTags('medicines')
 @ApiBearerAuth()
-@UseGuards(AtGuard, RolesGuard)
 @Controller('medicines')
 export class MedicinesController {
   constructor(private readonly medicinesService: MedicinesService) {}
@@ -29,19 +25,17 @@ export class MedicinesController {
     return this.medicinesService.create(createMedicineDto);
   }
 
-  @Roles(Role.admin, Role.pharmacist)
+  @Public()
   @Get()
   findAll() {
     return this.medicinesService.findAll();
   }
 
-  @Roles(Role.admin, Role.pharmacist)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.medicinesService.findOne(+id);
   }
 
-  @Roles(Role.admin, Role.pharmacist)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -50,7 +44,6 @@ export class MedicinesController {
     return this.medicinesService.update(+id, updateMedicineDto);
   }
 
-  @Roles(Role.admin, Role.pharmacist)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.medicinesService.remove(+id);

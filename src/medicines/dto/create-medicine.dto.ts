@@ -17,6 +17,10 @@ export class CreateMedicineDto {
   @IsNumber()
   price: number;
 
+  @IsString()
+  @IsNotEmpty()
+  img: string;
+
   @IsNotEmpty()
   @IsString()
   expiry_date: string;

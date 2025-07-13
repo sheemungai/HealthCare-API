@@ -1,4 +1,5 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
+import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
 import { Prescription } from 'src/prescriptions/entities/prescription.entity';
 import { Record } from 'src/records/entities/record.entity';
@@ -35,8 +36,14 @@ export class Patient {
   @Column()
   phone: string;
 
+  @Column({ nullable: true })
+  img: string;
+
   @Column()
   address: string;
+
+  @OneToMany(() => Medicine, (medicine) => medicine.patient)
+  medicines: Medicine[];
 
   @OneToMany(() => Appointment, (appointment) => appointment.patient)
   appointments: Appointment[];

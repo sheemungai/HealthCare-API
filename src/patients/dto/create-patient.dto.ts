@@ -35,6 +35,10 @@ export class CreatePatientDto {
   @IsNotEmpty()
   address: string;
 
+  @IsString()
+  @IsNotEmpty()
+  img: string;
+
   @IsNotEmpty()
   @IsNumber()
   user_id: number; // This should be set by the service, not the DTO

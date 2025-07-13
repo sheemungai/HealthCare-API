@@ -37,6 +37,10 @@ export class PatientsController {
     return this.patientsService.findDoctors();
   }
 
+  @Get('medicines')
+  findMedicines() {
+    return this.patientsService.findMedicines();
+  }
   @Roles(Role.admin, Role.doctor, Role.pharmacist)
   @Get(':id')
   findOne(@Param('id') id: string) {
