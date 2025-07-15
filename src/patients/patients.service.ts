@@ -59,7 +59,7 @@ export class PatientsService {
 
   async findAppointments(id: number) {
     return this.appointmentRepository.find({
-      where: { patient: { patient_id: id } },
+      where: { patient: { user: { user_id: id } } },
       relations: ['doctor'],
     });
   }

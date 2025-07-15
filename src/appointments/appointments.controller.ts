@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UseGuards,
+  ConsoleLogger,
 } from '@nestjs/common';
 import { AppointmentsService } from './appointments.service';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
@@ -26,6 +27,7 @@ export class AppointmentsController {
   @Public()
   @Post()
   create(@Body() createAppointmentDto: CreateAppointmentDto) {
+    console.log('Creating appointment with data:', createAppointmentDto);
     return this.appointmentsService.create(createAppointmentDto);
   }
 
@@ -35,7 +37,8 @@ export class AppointmentsController {
     return this.appointmentsService.findAll();
   }
 
-  @Roles(Role.doctor, Role.admin, Role.patient)
+  @Public()
+  // @Roles(Role.doctor, Role.admin, Role.patient)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.appointmentsService.findOne(+id);

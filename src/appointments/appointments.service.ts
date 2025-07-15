@@ -1,18 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Repository } from 'typeorm';
 import { Appointment } from './entities/appointment.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Patient } from 'src/patients/entities/patient.entity';
 
 @Injectable()
 export class AppointmentsService {
   constructor(
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
+    @InjectRepository(Patient)
+    private patientRepository: Repository<Patient>,
   ) {}
+
   async create(createAppointmentDto: CreateAppointmentDto) {
-    const appointment = this.appointmentRepository.create(createAppointmentDto);
+    const patient = await this.patientRepository.findOne({
+      where: { user: { user_id: createAppointmentDto.patient_id } },
+    });
+    if (!patient) {
+      throw new NotFoundException(
+        `Patient with ID ${createAppointmentDto.patient_id} not found`,
+      );
+    }
+
+    const appointment = this.appointmentRepository.create({
+      ...createAppointmentDto,
+      patient,
+    });
+
     return this.appointmentRepository.save(appointment);
   }
 
