@@ -98,6 +98,6 @@ export class UsersController {
         'You are not authorized to delete this user',
       );
     }
-    return this.usersService.remove(id);
+    return this.usersService.delete(id);
   }
 }

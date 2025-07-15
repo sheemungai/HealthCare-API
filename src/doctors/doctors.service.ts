@@ -53,7 +53,7 @@ export class DoctorsService {
     return this.doctorRepository.update(id, updateDoctorDto);
   }
 
-  async remove(id: number) {
+  async delete(id: number) {
     return this.doctorRepository.delete(id);
   }
 }

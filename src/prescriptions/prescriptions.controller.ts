@@ -59,6 +59,6 @@ export class PrescriptionsController {
   @Roles(Role.admin, Role.doctor)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.prescriptionsService.remove(+id);
+    return this.prescriptionsService.delete(+id);
   }
 }

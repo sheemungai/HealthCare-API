@@ -43,7 +43,10 @@ export class Doctor {
   @OneToMany(() => Appointment, (appointment) => appointment.doctor)
   appointments: Appointment[];
 
-  @OneToOne(() => User, (user) => user.doctor)
+  @OneToOne(() => User, (user) => user.doctor, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn()
   user: User;
 

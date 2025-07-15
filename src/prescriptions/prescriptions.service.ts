@@ -56,7 +56,7 @@ export class PrescriptionsService {
     return await this.prescriptionRepository.save(prescription);
   }
 
-  async remove(id: number) {
-    return this.prescriptionRepository.delete(id);
+  async delete(id: number) {
+    return this.prescriptionRepository.delete(+id);
   }
 }

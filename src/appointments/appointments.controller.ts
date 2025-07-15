@@ -29,13 +29,13 @@ export class AppointmentsController {
     return this.appointmentsService.create(createAppointmentDto);
   }
 
-  @Roles(Role.doctor, Role.admin)
+  @Roles(Role.doctor, Role.admin, Role.patient)
   @Get()
   findAll() {
     return this.appointmentsService.findAll();
   }
 
-  @Roles(Role.doctor, Role.admin)
+  @Roles(Role.doctor, Role.admin, Role.patient)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.appointmentsService.findOne(+id);
@@ -52,7 +52,7 @@ export class AppointmentsController {
 
   @Roles(Role.doctor, Role.admin)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.appointmentsService.remove(+id);
+  delete(@Param('id') id: string) {
+    return this.appointmentsService.delete(+id);
   }
 }

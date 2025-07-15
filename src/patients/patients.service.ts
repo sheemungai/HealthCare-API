@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { Role } from 'src/users/enums/user-role.enum';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
+import { Appointment } from 'src/appointments/entities/appointment.entity';
 
 @Injectable()
 export class PatientsService {
@@ -17,6 +18,8 @@ export class PatientsService {
     private readonly userService: UsersService, // Assuming you have a UserService to handle user-related operations
     @InjectRepository(Medicine)
     private medicineRepository: Repository<Medicine>,
+    @InjectRepository(Appointment)
+    private appointmentRepository: Repository<Appointment>,
   ) {}
 
   async create(createPatientDto: CreatePatientDto) {
@@ -52,6 +55,13 @@ export class PatientsService {
 
   async findMedicines() {
     return this.medicineRepository.find({});
+  }
+
+  async findAppointments(id: number) {
+    return this.appointmentRepository.find({
+      where: { patient: { patient_id: id } },
+      relations: ['doctor'],
+    });
   }
 
   async findOne(id: number) {

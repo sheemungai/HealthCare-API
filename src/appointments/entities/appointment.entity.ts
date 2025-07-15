@@ -34,17 +34,29 @@ export class Appointment {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @ManyToOne(() => Doctor, (doctor) => doctor.appointments)
+  @ManyToOne(() => Doctor, (doctor) => doctor.appointments, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
 
-  @ManyToOne(() => Patient, (patient) => patient.appointments)
+  @ManyToOne(() => Patient, (patient) => patient.appointments, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'patient_id' })
   patient: Patient;
 
-  @OneToOne(() => Prescription, (prescription) => prescription.appointment)
+  @OneToOne(() => Prescription, (prescription) => prescription.appointment, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   prescription: Prescription;
 
-  @OneToOne(() => Payment, (payment) => payment.appointment)
+  @OneToOne(() => Payment, (payment) => payment.appointment, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   payment: Payment;
 }

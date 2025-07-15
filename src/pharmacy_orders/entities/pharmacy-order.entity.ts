@@ -32,7 +32,10 @@ export class PharmacyOrder {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @ManyToOne(() => Patient, (patient) => patient.pharmacyOrders)
+  @ManyToOne(() => Patient, (patient) => patient.pharmacyOrders, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'patient_id' })
   patient: Patient;
 

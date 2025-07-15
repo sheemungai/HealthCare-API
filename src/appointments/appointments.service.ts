@@ -28,6 +28,8 @@ export class AppointmentsService {
       where: { appointment_id: id },
       relations: ['patient', 'doctor'],
     });
+    console.log('appointment  data', appointment);
+    // If appointment is not found, return a message
     if (!appointment) {
       return 'appointment not found';
     }
@@ -44,13 +46,7 @@ export class AppointmentsService {
     return this.appointmentRepository.update(id, updateAppointmentDto);
   }
 
-  async remove(id: number) {
-    const appointment = await this.appointmentRepository.findOne({
-      where: { appointment_id: id },
-    });
-    if (!appointment) {
-      return 'appointment not found';
-    }
-    return this.appointmentRepository.delete(appointment);
+  async delete(id: number) {
+    return this.appointmentRepository.delete(id);
   }
 }
