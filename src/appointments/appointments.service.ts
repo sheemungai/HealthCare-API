@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { Appointment } from './entities/appointment.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from 'src/patients/entities/patient.entity';
+import { ZoomService } from 'src/zoom/zoom.service';
+// import dayjs from 'dayjs';
 
 @Injectable()
 export class AppointmentsService {
@@ -13,6 +15,7 @@ export class AppointmentsService {
     private appointmentRepository: Repository<Appointment>,
     @InjectRepository(Patient)
     private patientRepository: Repository<Patient>,
+    private zoomService: ZoomService,
   ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto) {
@@ -25,10 +28,23 @@ export class AppointmentsService {
       );
     }
 
+    // Create Zoom meeting
+    const meetingTopic = `Medical Appointment - ${patient.user?.name || 'Patient'} - ${createAppointmentDto.reason}`;
+
+    const zoomMeeting = await this.zoomService.createMeeting(
+      meetingTopic,
+      createAppointmentDto.appointment_time,
+      60, // Default 60 minutes duration
+    );
+
+    console.log('zoomMeeting:', zoomMeeting);
     const appointment = this.appointmentRepository.create({
       ...createAppointmentDto,
       patient,
+      join_url: zoomMeeting.join_url, // Store the Zoom meeting URL
+      start_url: zoomMeeting.start_url, // Store the Zoom start URL
     });
+    console.log('Appointment data:', appointment);
 
     return this.appointmentRepository.save(appointment);
   }

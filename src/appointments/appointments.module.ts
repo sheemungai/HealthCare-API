@@ -6,9 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Patient } from 'src/patients/entities/patient.entity';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { User } from 'src/users/entities/user.entity';
+import { ZoomModule } from 'src/zoom/zoom.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Appointment, Patient, Doctor, User])],
+  imports: [
+    TypeOrmModule.forFeature([Appointment, Patient, Doctor, User]),
+    ZoomModule,
+  ],
   controllers: [AppointmentsController],
   providers: [AppointmentsService],
   exports: [AppointmentsModule, TypeOrmModule],

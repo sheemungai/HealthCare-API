@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateAppointmentDto {
   @IsNotEmpty()
@@ -17,6 +17,14 @@ export class CreateAppointmentDto {
   @IsNotEmpty()
   @IsString()
   status: string;
+
+  @IsString()
+  @IsOptional()
+  start_url?: string;
+
+  @IsString()
+  @IsOptional()
+  join_url?: string; // Optional field for Zoom meeting URL
 
   @IsNotEmpty()
   @IsString()

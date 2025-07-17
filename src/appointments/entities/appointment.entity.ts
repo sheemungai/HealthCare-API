@@ -31,6 +31,12 @@ export class Appointment {
   @Column()
   reason: string;
 
+  @Column({ nullable: true })
+  join_url: string;
+
+  @Column({ nullable: true })
+  start_url: string;
+
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 

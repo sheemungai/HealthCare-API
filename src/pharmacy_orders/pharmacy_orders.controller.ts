@@ -27,7 +27,6 @@ export class PharmacyOrdersController {
   @Post()
   @Roles(Role.doctor, Role.admin, Role.pharmacist, Role.patient)
   create(@Body() createPharmacyOrderDto: CreatePharmacyOrderDto) {
-    console.log('pharmarcy order data:', createPharmacyOrderDto);
     return this.pharmacyOrdersService.create(createPharmacyOrderDto);
   }
 
