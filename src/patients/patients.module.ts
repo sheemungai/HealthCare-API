@@ -8,10 +8,18 @@ import { User } from 'src/users/entities/user.entity';
 import { UsersModule } from 'src/users/users.module';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
+import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Patient, User, Appointment, Medicine, Doctor]),
+    TypeOrmModule.forFeature([
+      Patient,
+      User,
+      Appointment,
+      Medicine,
+      Doctor,
+      PharmacyOrder,
+    ]),
     UsersModule, // Import UsersModule to access User entity
   ],
   controllers: [PatientsController],

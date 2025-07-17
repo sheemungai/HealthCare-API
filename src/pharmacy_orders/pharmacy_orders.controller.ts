@@ -25,18 +25,19 @@ export class PharmacyOrdersController {
 
   @Public()
   @Post()
-  @Roles(Role.doctor, Role.admin, Role.pharmacist)
+  @Roles(Role.doctor, Role.admin, Role.pharmacist, Role.patient)
   create(@Body() createPharmacyOrderDto: CreatePharmacyOrderDto) {
+    console.log('pharmarcy order data:', createPharmacyOrderDto);
     return this.pharmacyOrdersService.create(createPharmacyOrderDto);
   }
 
-  @Roles(Role.doctor, Role.admin, Role.pharmacist)
+  @Roles(Role.doctor, Role.admin, Role.pharmacist, Role.patient)
   @Get()
   findAll() {
     return this.pharmacyOrdersService.findAll();
   }
 
-  @Roles(Role.doctor, Role.admin, Role.pharmacist)
+  @Roles(Role.doctor, Role.admin, Role.pharmacist, Role.patient)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.pharmacyOrdersService.findOne(+id);

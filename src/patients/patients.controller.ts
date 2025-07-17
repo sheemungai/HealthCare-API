@@ -42,6 +42,11 @@ export class PatientsController {
     return this.patientsService.findAppointments(+id);
   }
 
+  @Get('pharmacy_orders/:id')
+  findPharmacyOrders(@Param('id') id: string) {
+    return this.patientsService.findPharmacyOrders(+id);
+  }
+
   @Get('medicines')
   findMedicines() {
     return this.patientsService.findMedicines();

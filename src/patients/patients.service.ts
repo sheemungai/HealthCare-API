@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePatientDto } from './dto/create-patient.dto';
 import { UpdatePatientDto } from './dto/update-patient.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +9,8 @@ import { Role } from 'src/users/enums/user-role.enum';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Appointment } from 'src/appointments/entities/appointment.entity';
+import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class PatientsService {
@@ -20,6 +22,9 @@ export class PatientsService {
     private medicineRepository: Repository<Medicine>,
     @InjectRepository(Appointment)
     private appointmentRepository: Repository<Appointment>,
+    @InjectRepository(PharmacyOrder)
+    private pharmacyOrderRepository: Repository<PharmacyOrder>,
+    @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
   async create(createPatientDto: CreatePatientDto) {
@@ -62,6 +67,20 @@ export class PatientsService {
       where: { patient: { user: { user_id: id } } },
       relations: ['doctor'],
     });
+  }
+
+  async findPharmacyOrders(id: number) {
+    const patient = await this.patientRepository.findOne({
+      where: { user: { user_id: id } },
+    });
+    if (!patient) {
+      throw new NotFoundException('Patient not found');
+    }
+    const pharmacyOrders = await this.pharmacyOrderRepository.find({
+      where: { patient },
+    });
+    console.log('Pharmacy Orders:', pharmacyOrders);
+    return pharmacyOrders;
   }
 
   async findOne(id: number) {
