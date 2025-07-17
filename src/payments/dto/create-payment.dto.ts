@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreatePaymentDto {
   @IsNotEmpty()
@@ -9,19 +9,19 @@ export class CreatePaymentDto {
   @IsNumber()
   patient_id: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
-  pharmacy_order_id: number;
+  pharmacy_order_id?: number;
 
   @IsNotEmpty()
   @IsString()
   payment_method: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsNumber()
-  amount: number;
+  amount?: number;
 
   @IsNotEmpty()
   @IsString()
-  status: string;
+  status: string = 'pending';
 }

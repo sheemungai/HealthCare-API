@@ -16,7 +16,7 @@ export class CreateAppointmentDto {
   // eg confirmed, pending , cancelled
   @IsNotEmpty()
   @IsString()
-  status: string;
+  status: string = 'pending';
 
   @IsString()
   @IsOptional()

@@ -31,6 +31,9 @@ export class Appointment {
   @Column()
   reason: string;
 
+  @Column({ default: 'unpaid' })
+  payment_status: string;
+
   @Column({ nullable: true })
   join_url: string;
 

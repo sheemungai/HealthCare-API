@@ -28,6 +28,10 @@ export class PaymentsController {
   create(@Body() createPaymentDto: CreatePaymentDto) {
     return this.paymentsService.create(createPaymentDto);
   }
+  @Post('confirm')
+  confirm(@Body('payment_id') paymentId: number) {
+    return this.paymentsService.confirmPayment(paymentId);
+  }
 
   @Get()
   @Roles(Role.admin, Role.doctor, Role.patient, Role.pharmacist)

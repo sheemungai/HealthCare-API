@@ -37,7 +37,6 @@ export class AppointmentsController {
   }
 
   @Public()
-  // @Roles(Role.doctor, Role.admin, Role.patient)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.appointmentsService.findOne(+id);
