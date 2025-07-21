@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from 'src/patients/entities/patient.entity';
 import { ZoomService } from 'src/zoom/zoom.service';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
 // import dayjs from 'dayjs';
 
 @Injectable()
@@ -19,6 +20,8 @@ export class AppointmentsService {
     @InjectRepository(Doctor)
     private doctorRepository: Repository<Doctor>,
     private zoomService: ZoomService,
+    @InjectRepository(Payment)
+    private paymentRepository: Repository<Payment>,
   ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto) {
@@ -63,8 +66,19 @@ export class AppointmentsService {
       start_url: zoomMeeting.start_url, // Store the Zoom start URL
     });
     console.log('Appointment data:', appointment);
+    const savedAppointment = await this.appointmentRepository.save(appointment);
 
-    return this.appointmentRepository.save(appointment);
+    const payment = this.paymentRepository.create({
+      patient_id: createAppointmentDto.patient_id,
+      payment_method: 'Mpesa',
+      appointment: savedAppointment,
+      status: 'unpaid',
+      amount: doctor.consultation_fee, // Assuming consultation fee is the amount
+    });
+
+    await this.paymentRepository.save(payment);
+
+    return savedAppointment;
   }
 
   async findAll() {

@@ -23,5 +23,5 @@ export class CreatePaymentDto {
 
   @IsNotEmpty()
   @IsString()
-  status: string = 'pending';
+  status?: string = 'pending';
 }

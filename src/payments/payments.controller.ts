@@ -1,7 +1,6 @@
 import {
   Controller,
   Get,
-  Post,
   Body,
   Patch,
   Param,
@@ -9,7 +8,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
-import { CreatePaymentDto } from './dto/create-payment.dto';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/auth/decorators';
@@ -22,16 +20,6 @@ import { AtGuard, RolesGuard } from 'src/auth/guards';
 @Controller('payments')
 export class PaymentsController {
   constructor(private readonly paymentsService: PaymentsService) {}
-
-  @Roles(Role.admin, Role.doctor, Role.patient, Role.pharmacist)
-  @Post()
-  create(@Body() createPaymentDto: CreatePaymentDto) {
-    return this.paymentsService.create(createPaymentDto);
-  }
-  @Post('confirm')
-  confirm(@Body('payment_id') paymentId: number) {
-    return this.paymentsService.confirmPayment(paymentId);
-  }
 
   @Get()
   @Roles(Role.admin, Role.doctor, Role.patient, Role.pharmacist)

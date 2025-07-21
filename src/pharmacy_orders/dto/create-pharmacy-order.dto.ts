@@ -13,7 +13,11 @@ export class CreatePharmacyOrderDto {
   @IsNotEmpty()
   quantity: number;
 
+  // @IsString()
+  // @IsNotEmpty()
+  // status: string;
+
   @IsString()
   @IsNotEmpty()
-  status: string;
+  payment_method: string;
 }

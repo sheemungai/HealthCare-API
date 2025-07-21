@@ -4,19 +4,47 @@ import { UpdatePharmacyOrderDto } from './dto/update-pharmacy-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PharmacyOrder } from './entities/pharmacy-order.entity';
+import { Patient } from 'src/patients/entities/patient.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
 
 @Injectable()
 export class PharmacyOrdersService {
   constructor(
     @InjectRepository(PharmacyOrder)
     private pharmacy_orderRepository: Repository<PharmacyOrder>,
+    @InjectRepository(Patient)
+    private patientRepository: Repository<Patient>,
+    @InjectRepository(Payment)
+    private paymentRepository: Repository<Payment>,
   ) {}
 
   async create(createPharmacyOrderDto: CreatePharmacyOrderDto) {
-    const pharmacy_orders = this.pharmacy_orderRepository.create(
-      createPharmacyOrderDto,
-    );
-    return await this.pharmacy_orderRepository.save(pharmacy_orders);
+    const patient = await this.patientRepository.findOne({
+      where: { user: { user_id: createPharmacyOrderDto.patient_id } },
+    });
+    if (!patient) {
+      return 'Patient not found';
+    }
+    const pharmacy_orders = this.pharmacy_orderRepository.create({
+      patient: patient,
+      ...createPharmacyOrderDto,
+    });
+
+    const savePharmacyOrder =
+      await this.pharmacy_orderRepository.save(pharmacy_orders);
+
+    if (!savePharmacyOrder) {
+      return 'Error saving pharmacy order';
+    }
+    const payment = this.paymentRepository.create({
+      patient_id: createPharmacyOrderDto.patient_id,
+      payment_method: 'Mpesa',
+      pharmacyOrder: savePharmacyOrder,
+      status: 'unpaid',
+      amount: createPharmacyOrderDto.quantity,
+    });
+    await this.paymentRepository.save(payment);
+    return savePharmacyOrder;
   }
 
   async findAll() {

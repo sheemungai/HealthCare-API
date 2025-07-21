@@ -25,7 +25,7 @@ export class PharmacyOrdersController {
 
   @Public()
   @Post()
-  @Roles(Role.doctor, Role.admin, Role.pharmacist, Role.patient)
+  // @Roles(Role.doctor, Role.admin, Role.pharmacist, Role.patient)
   create(@Body() createPharmacyOrderDto: CreatePharmacyOrderDto) {
     return this.pharmacyOrdersService.create(createPharmacyOrderDto);
   }

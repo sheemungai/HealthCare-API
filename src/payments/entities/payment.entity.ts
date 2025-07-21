@@ -14,16 +14,10 @@ export class Payment {
   payment_id: number;
 
   @Column()
-  appointment_id: number;
-
-  @Column()
   patient_id: number;
 
   @Column()
   payment_method: string;
-
-  @Column()
-  pharmacy_order_id: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
@@ -39,6 +33,5 @@ export class Payment {
   appointment: Appointment;
 
   @OneToOne(() => PharmacyOrder, (pharmacyOrder) => pharmacyOrder.payment)
-  @JoinColumn()
   pharmacyOrder: PharmacyOrder;
 }
