@@ -14,6 +14,8 @@ import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AtGuard } from './auth/guards';
+import { AiModule } from './aimodel/aimodel.module';
+import { ZoomModule } from './zoom/zoom.module';
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { AtGuard } from './auth/guards';
     MedicinesModule,
     PrescriptionsModule,
     AuthModule,
+    ZoomModule,
+    AiModule,
   ],
   controllers: [],
   providers: [{ provide: 'APP_GUARD', useClass: AtGuard }],

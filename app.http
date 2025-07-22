@@ -71,7 +71,15 @@ Content-Type: application/json
   "role": "doctor"
 }
 
+#AI Model Interaction
+###
+POST http://localhost:8000/api/v1/ai/ava
+Content-Type: application/json
 
+{
+  "message": "Hello, Nuru!",
+  "role": "patient"
+}
 
 ### Create Patient 1
 POST http://localhost:8000/api/v1/users
