@@ -1,4 +1,10 @@
-import { IsString, IsEnum, IsNotEmpty } from 'class-validator';
+import {
+  IsString,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsNumber,
+} from 'class-validator';
 import { Role } from '../enums/user-role.enum';
 
 export class CreateUserDto {
@@ -20,5 +26,34 @@ export class CreateUserDto {
 
   @IsEnum(Role)
   @IsNotEmpty()
-  role?: Role;
+  role: Role;
+
+  @IsString()
+  @IsOptional()
+  dob?: Date;
+
+  @IsOptional()
+  @IsString()
+  gender?: string;
+
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  // Doctor specific fields
+  @IsOptional()
+  @IsString()
+  specialization?: string;
+
+  @IsOptional()
+  @IsString()
+  license_number?: string;
+
+  @IsOptional()
+  @IsString()
+  availability?: string;
+
+  @IsOptional()
+  @IsNumber()
+  consultation_fee?: number;
 }
