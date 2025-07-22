@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from 'src/patients/entities/patient.entity';
 import { ZoomService } from 'src/zoom/zoom.service';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
-import { Payment } from 'src/payments/entities/payment.entity';
+import { Payment, paymentStatus } from 'src/payments/entities/payment.entity';
 // import dayjs from 'dayjs';
 
 @Injectable()
@@ -72,7 +72,7 @@ export class AppointmentsService {
       patient_id: createAppointmentDto.patient_id,
       payment_method: 'Mpesa',
       appointment: savedAppointment,
-      status: 'unpaid',
+      status: paymentStatus.PENDING,
       amount: doctor.consultation_fee, // Assuming consultation fee is the amount
     });
 

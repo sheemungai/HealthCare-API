@@ -8,6 +8,12 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+export enum paymentStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
 @Entity('payments')
 export class Payment {
   @PrimaryGeneratedColumn()
@@ -25,11 +31,14 @@ export class Payment {
   @Column()
   amount: number;
 
-  @Column()
-  status: string;
+  @Column({ type: 'enum', enum: paymentStatus, default: paymentStatus.PENDING })
+  status: paymentStatus;
+
+  @Column({ nullable: true })
+  transaction_id: string;
 
   @OneToOne(() => Appointment, (appointment) => appointment.payment)
-  @JoinColumn()
+  @JoinColumn({ name: 'appointment_id' })
   appointment: Appointment;
 
   @OneToOne(() => PharmacyOrder, (pharmacyOrder) => pharmacyOrder.payment)

@@ -1,7 +1,7 @@
 @url = http://localhost:8000/api/v1
 
 @admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMDU0MzU5LCJleHAiOjE3NTIyMjcxNTl9.cqgCA_9uyxiwj8EUtwcljbnkBBuy4B0F-KYfOWLRzRU
-@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjE3LCJlbWFpbCI6InNoZWlsbGFAZ21haWwuY29tIiwicm9sZSI6InBhdGllbnQiLCJpYXQiOjE3NTI0MTM2NTksImV4cCI6MTc1MjU4NjQ1OX0.bZrvtjXRKE7U8_Q8yS9gvjR9iPNKjs6u1KmC6Ksp708
+@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTc1MzE5MDc3MiwiZXhwIjoxNzUzMzYzNTcyfQ.ff-zKQ5QgzY3u42FQ45lgOj7orHZ7X68Xlvr8asdBjc
 ### Admin Login
 POST {{url}}/auth/login
 Content-Type: application/json
@@ -16,8 +16,8 @@ POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "sheilla@gmail.com",
-  "password": "Pass100"
+  "email": "john@gmail.com",
+  "password": "Pass101"
 }
 
 
@@ -302,6 +302,22 @@ Content-Type: application/json
 
 
 ### Create Payment 1 - Appointment Consultation Fee
+POST http://localhost:8000/api/v1/payments/init
+Content-Type: application/json  
+Authorization: Bearer {{patient_token}}
+
+{
+"email": "john@gmail.com",
+  "amount": 2500,
+  "payment_method": "mpesa",
+  "patient_id": 1,
+  "appointment_id": 1,
+  "callback_url": "https://google.com"
+
+}
+
+
+
 ###
 
 POST http://localhost:8000/api/v1/payments
@@ -452,3 +468,7 @@ Authorization: Bearer {{admin_token}}
   "description": "Patient follow-up for hypertension treatment. Blood pressure readings improved from 160/95 to 140/85. Patient reports better adherence to medication regimen. Recommended continued ACE inhibitor therapy and dietary modifications."
 }
 
+
+###
+GET {{url}}/payments/callback?reference=b5mncikfgw
+Authorization: Bearer {{patient_token}}

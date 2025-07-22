@@ -5,7 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PharmacyOrder } from './entities/pharmacy-order.entity';
 import { Patient } from 'src/patients/entities/patient.entity';
-import { Payment } from 'src/payments/entities/payment.entity';
+import { Payment, paymentStatus } from 'src/payments/entities/payment.entity';
 
 @Injectable()
 export class PharmacyOrdersService {
@@ -40,7 +40,7 @@ export class PharmacyOrdersService {
       patient_id: createPharmacyOrderDto.patient_id,
       payment_method: 'Mpesa',
       pharmacyOrder: savePharmacyOrder,
-      status: 'unpaid',
+      status: paymentStatus.PENDING,
       amount: createPharmacyOrderDto.quantity,
     });
     await this.paymentRepository.save(payment);

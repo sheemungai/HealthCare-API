@@ -1,15 +1,164 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
 import { Repository } from 'typeorm';
+import axios from 'axios';
+import { CreatePaymentDto } from './dto/create-payment.dto';
+import { paymentStatus } from './entities/payment.entity';
+import { Appointment } from 'src/appointments/entities/appointment.entity';
 
 @Injectable()
 export class PaymentsService {
   constructor(
     @InjectRepository(Payment)
     private readonly paymentRepository: Repository<Payment>,
+    @InjectRepository(Appointment)
+    private readonly appointmentRepository: Repository<Appointment>,
   ) {}
+
+  async initializePayment(createPaymentDto: CreatePaymentDto) {
+    try {
+      const payload = {
+        email: createPaymentDto.email,
+        amount: createPaymentDto.amount,
+        callback_url: createPaymentDto.callback_url,
+      };
+
+      interface PaystackResponse {
+        status: boolean;
+        data: {
+          reference: string;
+          authorization_url: string;
+        };
+        message?: string;
+      }
+
+      const response = await axios.post<PaystackResponse>(
+        'https://api.paystack.co/transaction/initialize',
+        payload,
+        {
+          headers: {
+            Authorization: `Bearer sk_test_d3b4382f60bbc3fbd49bd75eb956378dace11302`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      if (!response.data.status) {
+        throw new BadRequestException(
+          'Failed to initialize payment with Paystack',
+        );
+      }
+
+      const existingPayment = await this.paymentRepository.findOne({
+        where: { transaction_id: response.data.data.reference },
+      });
+
+      if (existingPayment) {
+        return new BadRequestException(
+          'Payment with this transaction ID already exists',
+        );
+      }
+
+      const appointment = await this.appointmentRepository.findOne({
+        where: { appointment_id: createPaymentDto.appointment_id },
+      });
+      if (!appointment) {
+        throw new BadRequestException('Appointment not found');
+      }
+      const payment = this.paymentRepository.create({
+        patient_id: createPaymentDto.patient_id,
+        status: paymentStatus.PENDING,
+        amount: createPaymentDto.amount! * 100, // Paystack expects amount in kobo
+        transaction_id: response.data.data.reference,
+      });
+
+      payment.payment_method = 'mpesa';
+      payment.appointment = appointment;
+
+      await this.paymentRepository.save(payment);
+
+      return {
+        authorization_url: response.data.data.authorization_url,
+        payment_reference: response.data.data.reference,
+        payment_id: payment.payment_id,
+      };
+    } catch (error) {
+      console.error('Payment initialization error:', error);
+      throw error;
+    }
+  }
+
+  //payment verification
+
+  async verifyPayment(reference: string) {
+    try {
+      interface PaystackVerifyResponse {
+        status: boolean;
+        data: {
+          status: string;
+          amount: number;
+          [key: string]: any;
+        };
+        message?: string;
+      }
+
+      const response = await axios.get<PaystackVerifyResponse>(
+        `https://api.paystack.co/transaction/verify/${reference}`,
+        {
+          headers: {
+            Authorization: `Bearer sk_test_d3b4382f60bbc3fbd49bd75eb956378dace11302`,
+          },
+        },
+      );
+
+      const data = response.data?.data;
+      if (!response.data.status || !data) {
+        throw new BadRequestException('Failed to verify payment');
+      }
+
+      const payment = await this.paymentRepository.findOne({
+        where: { transaction_id: reference },
+      });
+
+      if (!payment) {
+        throw new NotFoundException('Payment record not found');
+      }
+
+      // Already completed? No need to reprocess
+      if (payment.status === paymentStatus.COMPLETED) {
+        return { message: 'Payment already verified and completed' };
+      }
+
+      // Payment failed
+      if (data.status !== 'success') {
+        payment.status = paymentStatus.FAILED;
+        await this.paymentRepository.save(payment);
+        return { message: 'Payment failed', payment };
+      }
+
+      // Payment success
+      const paidAmount = data.amount / 100;
+
+      payment.amount = paidAmount;
+      payment.status = paymentStatus.COMPLETED;
+      payment.created_at = new Date();
+      await this.paymentRepository.save(payment);
+
+      return {
+        message: 'Payment verified and updated',
+        payment,
+      };
+    } catch (error) {
+      console.error('Payment verification error:', error);
+      throw error;
+    }
+  }
 
   async findAll() {
     const payments = await this.paymentRepository.find();

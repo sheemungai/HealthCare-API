@@ -1,4 +1,12 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsString,
+  IsNumber,
+  IsOptional,
+  IsEmail,
+  IsUrl,
+} from 'class-validator';
+import { paymentStatus } from '../entities/payment.entity';
 
 export class CreatePaymentDto {
   @IsNotEmpty()
@@ -8,6 +16,13 @@ export class CreatePaymentDto {
   @IsNotEmpty()
   @IsNumber()
   patient_id: number;
+
+  @IsEmail()
+  email: string;
+
+  @IsOptional()
+  @IsUrl()
+  callback_url?: string;
 
   @IsOptional()
   @IsNumber()
@@ -23,5 +38,10 @@ export class CreatePaymentDto {
 
   @IsNotEmpty()
   @IsString()
-  status?: string = 'pending';
+  status?: paymentStatus = paymentStatus.PENDING;
+
+  @IsNotEmpty()
+  @IsString()
+  @IsOptional()
+  transaction_id?: string;
 }
