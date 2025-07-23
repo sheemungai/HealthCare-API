@@ -1,4 +1,7 @@
-import { Appointment } from 'src/appointments/entities/appointment.entity';
+import {
+  Appointment,
+  // paymentStatus,
+} from 'src/appointments/entities/appointment.entity';
 import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
 import {
   Entity,
@@ -18,6 +21,12 @@ export enum paymentStatus {
 export class Payment {
   @PrimaryGeneratedColumn()
   payment_id: number;
+
+  @Column({ nullable: true })
+  appointment_id: number;
+
+  @Column({ nullable: true })
+  pharmacy_order_id: number;
 
   @Column()
   patient_id: number;

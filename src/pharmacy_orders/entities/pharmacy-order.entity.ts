@@ -12,6 +12,12 @@ import {
   OneToOne,
 } from 'typeorm';
 
+export enum paymentStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
 @Entity('pharmacy_orders')
 export class PharmacyOrder {
   @PrimaryGeneratedColumn()

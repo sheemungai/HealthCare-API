@@ -2,12 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAppointmentDto } from './dto/create-appointment.dto';
 import { UpdateAppointmentDto } from './dto/update-appointment.dto';
 import { Repository } from 'typeorm';
-import { Appointment } from './entities/appointment.entity';
+import { Appointment, paymentStatus } from './entities/appointment.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Patient } from 'src/patients/entities/patient.entity';
 import { ZoomService } from 'src/zoom/zoom.service';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
-import { Payment, paymentStatus } from 'src/payments/entities/payment.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
 // import dayjs from 'dayjs';
 
 @Injectable()
@@ -61,7 +61,7 @@ export class AppointmentsService {
       ...createAppointmentDto,
       patient,
       doctor,
-      payment_status: 'unpaid',
+      payment_status: paymentStatus.PENDING, // Default payment status
       join_url: zoomMeeting.join_url, // Store the Zoom meeting URL
       start_url: zoomMeeting.start_url, // Store the Zoom start URL
     });
@@ -91,7 +91,7 @@ export class AppointmentsService {
   async findOne(id: number) {
     const appointment = await this.appointmentRepository.findOne({
       where: { appointment_id: id },
-      relations: ['patient', 'doctor'],
+      relations: ['patient', 'doctor', 'payment'],
     });
     console.log('appointment  data', appointment);
     // If appointment is not found, return a message

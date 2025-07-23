@@ -5,11 +5,10 @@ import {
 } from '@nestjs/common';
 import { UpdatePaymentDto } from './dto/update-payment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Payment } from './entities/payment.entity';
+import { Payment, paymentStatus } from './entities/payment.entity';
 import { Repository } from 'typeorm';
 import axios from 'axios';
 import { CreatePaymentDto } from './dto/create-payment.dto';
-import { paymentStatus } from './entities/payment.entity';
 import { Appointment } from 'src/appointments/entities/appointment.entity';
 
 @Injectable()
@@ -74,12 +73,12 @@ export class PaymentsService {
       const payment = this.paymentRepository.create({
         patient_id: createPaymentDto.patient_id,
         status: paymentStatus.PENDING,
-        amount: createPaymentDto.amount! * 100, // Paystack expects amount in kobo
+        amount: createPaymentDto.amount, // Paystack expects amount in kobo
         transaction_id: response.data.data.reference,
       });
 
       payment.payment_method = 'mpesa';
-      payment.appointment = appointment;
+      payment.appointment_id = appointment.appointment_id;
 
       await this.paymentRepository.save(payment);
 
@@ -130,11 +129,22 @@ export class PaymentsService {
         throw new NotFoundException('Payment record not found');
       }
 
+      const appointment = await this.appointmentRepository.findOne({
+        where: { appointment_id: payment.appointment_id },
+        relations: ['patient'],
+      });
+
+      if (!appointment) {
+        throw new NotFoundException('Appointment record not found');
+      }
+
+      appointment.payment_status = paymentStatus.COMPLETED;
       // Already completed? No need to reprocess
       if (payment.status === paymentStatus.COMPLETED) {
         return { message: 'Payment already verified and completed' };
       }
 
+      await this.appointmentRepository.save(appointment);
       // Payment failed
       if (data.status !== 'success') {
         payment.status = paymentStatus.FAILED;
@@ -143,7 +153,7 @@ export class PaymentsService {
       }
 
       // Payment success
-      const paidAmount = data.amount / 100;
+      const paidAmount = data.amount;
 
       payment.amount = paidAmount;
       payment.status = paymentStatus.COMPLETED;
@@ -168,6 +178,7 @@ export class PaymentsService {
   async findOne(id: number) {
     const payment = await this.paymentRepository.findOne({
       where: { payment_id: id },
+      relations: ['appointment', 'pharmacyOrder'],
     });
     if (!payment) {
       return 'payment not found';

@@ -24,7 +24,7 @@ export class Medicine {
   @Column()
   stock_quantity: number;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   price: number;
 
   @Column({ nullable: true })

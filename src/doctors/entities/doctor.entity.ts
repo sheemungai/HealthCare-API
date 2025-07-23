@@ -37,7 +37,7 @@ export class Doctor {
   @Column()
   availability: string;
 
-  @Column()
+  @Column({ type: 'decimal', precision: 10, scale: 2, nullable: true })
   consultation_fee: number;
 
   @OneToMany(() => Appointment, (appointment) => appointment.doctor)

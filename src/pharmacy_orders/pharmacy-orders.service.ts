@@ -5,7 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PharmacyOrder } from './entities/pharmacy-order.entity';
 import { Patient } from 'src/patients/entities/patient.entity';
-import { Payment, paymentStatus } from 'src/payments/entities/payment.entity';
+import { Payment } from 'src/payments/entities/payment.entity';
+import { paymentStatus } from 'src/appointments/entities/appointment.entity';
 
 @Injectable()
 export class PharmacyOrdersService {

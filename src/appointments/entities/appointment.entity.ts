@@ -11,6 +11,12 @@ import {
   OneToOne,
 } from 'typeorm';
 
+export enum paymentStatus {
+  PENDING = 'pending',
+  COMPLETED = 'completed',
+  FAILED = 'failed',
+}
+
 @Entity()
 export class Appointment {
   @PrimaryGeneratedColumn()
@@ -31,8 +37,8 @@ export class Appointment {
   @Column()
   reason: string;
 
-  @Column({ default: 'unpaid' })
-  payment_status: string;
+  @Column({ type: 'enum', enum: paymentStatus, default: paymentStatus.PENDING })
+  payment_status: paymentStatus;
 
   @Column({ nullable: true })
   join_url: string;

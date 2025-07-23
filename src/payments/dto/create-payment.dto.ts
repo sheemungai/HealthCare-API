@@ -6,7 +6,7 @@ import {
   IsEmail,
   IsUrl,
 } from 'class-validator';
-import { paymentStatus } from '../entities/payment.entity';
+import { paymentStatus } from 'src/appointments/entities/appointment.entity';
 
 export class CreatePaymentDto {
   @IsNotEmpty()

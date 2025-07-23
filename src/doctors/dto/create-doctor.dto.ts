@@ -13,7 +13,6 @@ export class CreateDoctorDto {
   @IsNotEmpty()
   availability: string;
 
-  @IsNumber()
   @IsNotEmpty()
   consultation_fee: number;
 
