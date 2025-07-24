@@ -1,14 +1,14 @@
 @url = http://localhost:8000/api/v1
 
 @admin_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWxpY2VAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzUyMDU0MzU5LCJleHAiOjE3NTIyMjcxNTl9.cqgCA_9uyxiwj8EUtwcljbnkBBuy4B0F-KYfOWLRzRU
-@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEyLCJlbWFpbCI6Imxpc2FAZ21haWwuY29tIiwicm9sZSI6InBhdGllbnQiLCJpYXQiOjE3NTMyNTg3NTMsImV4cCI6MTc1MzQzMTU1M30.LtCU38oXOdSgczjqnKBpdiOjSQcuAi4Bp3IblbZHEuM
+@patient_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjksImVtYWlsIjoiam9obkBnbWFpbC5jb20iLCJyb2xlIjoicGF0aWVudCIsImlhdCI6MTc1MzI5OTk2MSwiZXhwIjoxNzUzNDcyNzYxfQ.NambnUvasMCpLFLuZBIl_Q8AwfT6TJvAAAjgR491N1M
 ### Admin Login
 POST {{url}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "alice@gmail.com",
-  "password": "Pass123"
+  "email": "john@gmail.com",
+  "password": "Pass101"
 }
 
 ### Patient Login
@@ -466,7 +466,7 @@ Authorization: Bearer {{patient_token}}
 
 }
 ###
-GET {{url}}/payments/callback?reference=zlzu9fd6un
+GET {{url}}/payments/callback?reference=utlih3bkn6
 Authorization: Bearer {{patient_token}}
 
 ### Create Payment 1 - Appointment Consultation Fee
@@ -475,11 +475,11 @@ Content-Type: application/json
 Authorization: Bearer {{patient_token}}
 
 {
-"email": "lisa@gmail.com",
-  "amount": 2800,
+"email": "robert@gmail.com",
+  "amount": 1500.00,
   "payment_method": "mpesa",
-  "patient_id": 4,
-  "appointment_id": 21,
+  "patient_id": 3,
+  "appointment_id": 32,
   "callback_url": "https://google.com"
 
 }

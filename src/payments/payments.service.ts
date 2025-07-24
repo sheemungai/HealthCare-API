@@ -22,9 +22,14 @@ export class PaymentsService {
 
   async initializePayment(createPaymentDto: CreatePaymentDto) {
     try {
+      if (typeof createPaymentDto.amount !== 'number') {
+        throw new BadRequestException(
+          'Amount is required and must be a number',
+        );
+      }
       const payload = {
         email: createPaymentDto.email,
-        amount: createPaymentDto.amount,
+        amount: createPaymentDto.amount * 100, // Paystack expects amount in kobo
         callback_url: createPaymentDto.callback_url,
       };
 
@@ -70,10 +75,17 @@ export class PaymentsService {
       if (!appointment) {
         throw new BadRequestException('Appointment not found');
       }
+
+      if (typeof createPaymentDto.amount !== 'number') {
+        throw new BadRequestException(
+          'Amount is required and must be a number',
+        );
+      }
+
       const payment = this.paymentRepository.create({
         patient_id: createPaymentDto.patient_id,
         status: paymentStatus.PENDING,
-        amount: createPaymentDto.amount, // Paystack expects amount in kobo
+        amount: createPaymentDto.amount / 100, // Paystack expects amount in kobo
         transaction_id: response.data.data.reference,
       });
 
@@ -155,7 +167,7 @@ export class PaymentsService {
       // Payment success
       const paidAmount = data.amount;
 
-      payment.amount = paidAmount;
+      payment.amount = paidAmount; // Convert kobo to naira
       payment.status = paymentStatus.COMPLETED;
       payment.created_at = new Date();
       await this.paymentRepository.save(payment);

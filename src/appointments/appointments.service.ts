@@ -30,7 +30,7 @@ export class AppointmentsService {
         where: { user: { user_id: createAppointmentDto.patient_id } },
       }),
       this.doctorRepository.findOne({
-        where: { user: { user_id: createAppointmentDto.doctor_id } },
+        where: { doctor_id: createAppointmentDto.doctor_id },
       }),
     ]);
 
