@@ -9,6 +9,7 @@ import { UsersModule } from 'src/users/users.module';
 import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
+import { Prescription } from 'src/prescriptions/entities/prescription.entity';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entit
       Medicine,
       Doctor,
       PharmacyOrder,
+      Prescription, // Ensure Prescription is imported if used in PatientsService
     ]),
     UsersModule, // Import UsersModule to access User entity
   ],

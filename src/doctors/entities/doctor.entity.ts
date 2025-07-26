@@ -49,9 +49,9 @@ export class Doctor {
   })
   @JoinColumn()
   user: User;
-
-  @OneToMany(() => Prescription, (prescription) => prescription.doctor)
-  @JoinColumn()
+  @OneToMany(() => Prescription, (prescription) => prescription.doctor, {
+    onDelete: 'CASCADE',
+  })
   prescriptions: Prescription[];
 
   @OneToMany(() => Record, (record) => record.doctor)

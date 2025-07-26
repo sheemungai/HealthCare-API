@@ -33,6 +33,13 @@ export class AiService {
       'headache',
       'fever',
       'cough',
+      'joint pain',
+      'back pain',
+      'stomach pain',
+      'chest pain',
+      'nausea',
+      'vomiting',
+      'diarrhea',
       'pain',
       'sick',
       'illness',
@@ -92,6 +99,18 @@ export class AiService {
       'sick',
       'ill',
       'clinic visit',
+      'book appointment',
+      'schedule appointment',
+      'make appointment',
+      'appointment booking',
+      'see doctor',
+      'visit doctor',
+      'book consultation',
+      'schedule consultation',
+      'available slots',
+      'appointment time',
+      'booking',
+      'schedule',
 
       // Swahili
       'hospitali',
@@ -204,7 +223,7 @@ export class AiService {
 
     try {
       const response = await this.together.chat.completions.create({
-        model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo-Free',
+        model: 'deepseek-ai/DeepSeek-R1-Distill-Llama-70B-free',
         messages: [
           { role: 'system', content: systemPrompt },
           { role: 'user', content: prompt },

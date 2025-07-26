@@ -35,13 +35,13 @@ export class PrescriptionsController {
     return this.prescriptionsService.findAll();
   }
 
-  @Roles(Role.admin, Role.doctor)
+  // @Roles(Role.admin, Role.doctor)
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.prescriptionsService.findOne(+id);
   }
 
-  @Roles(Role.admin, Role.doctor)
+  @Roles(Role.admin, Role.doctor, Role.patient)
   @Get(':id/patients')
   findPatients(@Param('id') id: string) {
     return this.prescriptionsService.findPatients(+id);

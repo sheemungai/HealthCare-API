@@ -69,10 +69,9 @@ export class AppointmentsService {
     const savedAppointment = await this.appointmentRepository.save(appointment);
 
     const payment = this.paymentRepository.create({
-      patient_id: createAppointmentDto.patient_id,
+      patient_id: ,
       payment_method: 'Mpesa',
       appointment: savedAppointment,
-      status: paymentStatus.PENDING,
       amount: doctor.consultation_fee, // Assuming consultation fee is the amount
     });
 

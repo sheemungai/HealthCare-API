@@ -17,6 +17,10 @@ export class CreatePaymentDto {
   @IsNumber()
   patient_id: number;
 
+  @IsNotEmpty()
+  @IsNumber()
+  doctor_id: number;
+
   @IsEmail()
   email: string;
 
@@ -31,10 +35,6 @@ export class CreatePaymentDto {
   @IsNotEmpty()
   @IsString()
   payment_method: string;
-
-  @IsOptional()
-  @IsNumber()
-  amount?: number;
 
   @IsNotEmpty()
   @IsString()

@@ -11,6 +11,7 @@ import { Medicine } from 'src/medicines/entities/medicine.entity';
 import { Appointment } from 'src/appointments/entities/appointment.entity';
 import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Prescription } from 'src/prescriptions/entities/prescription.entity';
 
 @Injectable()
 export class PatientsService {
@@ -25,6 +26,8 @@ export class PatientsService {
     @InjectRepository(PharmacyOrder)
     private pharmacyOrderRepository: Repository<PharmacyOrder>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Prescription)
+    private prescriptionsRepository: Repository<Prescription>,
   ) {}
 
   async create(createPatientDto: CreatePatientDto) {
@@ -60,6 +63,18 @@ export class PatientsService {
 
   async findMedicines() {
     return this.medicineRepository.find({});
+  }
+
+  async findPrescriptions(id: number) {
+    console.log('patients prescriptions id:', id);
+    const patient = await this.prescriptionsRepository.find({
+      where: { patient: { user: { user_id: id } } },
+    });
+    if (!patient) {
+      throw new NotFoundException('Patient not found');
+    }
+    console.log('patients ', patient);
+    return patient;
   }
 
   async findAppointments(id: number) {

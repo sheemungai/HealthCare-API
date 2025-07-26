@@ -9,12 +9,14 @@ import {
   ManyToOne,
   JoinColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 
 export enum paymentStatus {
   PENDING = 'pending',
   COMPLETED = 'completed',
   FAILED = 'failed',
+  UNPAID = 'unpaid',
 }
 
 @Entity()
@@ -37,7 +39,7 @@ export class Appointment {
   @Column()
   reason: string;
 
-  @Column({ type: 'enum', enum: paymentStatus, default: paymentStatus.PENDING })
+  @Column({ type: 'enum', enum: paymentStatus, default: paymentStatus.UNPAID })
   payment_status: paymentStatus;
 
   @Column({ nullable: true })
@@ -63,11 +65,8 @@ export class Appointment {
   @JoinColumn({ name: 'patient_id' })
   patient: Patient;
 
-  @OneToOne(() => Prescription, (prescription) => prescription.appointment, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  prescription: Prescription;
+  @OneToMany(() => Prescription, (prescription) => prescription.appointment)
+  prescriptions: Prescription[];
 
   @OneToOne(() => Payment, (payment) => payment.appointment, {
     onDelete: 'CASCADE',

@@ -39,7 +39,7 @@ export class PaymentsController {
 
   @Get('callback')
   @ApiOperation({ summary: 'Handle Paystack/M-PESA callback (after payment)' })
-  async handlePaymentCallback(@Query('reference') reference: string) {
+  async handlePaymentCallback(@Query('reference') reference: number) {
     if (!reference) {
       throw new BadRequestException('Missing payment reference in callback');
     }

@@ -9,7 +9,6 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
-  OneToOne,
   ManyToMany,
   JoinTable,
   OneToMany,
@@ -35,15 +34,21 @@ export class Prescription {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
 
-  @ManyToOne(() => Patient, (patient) => patient.prescriptions)
+  @ManyToOne(() => Patient, (patient) => patient.prescriptions, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ name: 'patient_id' })
   patient: Patient;
 
   @ManyToOne(() => Doctor, (doctor) => doctor.prescriptions)
-  @JoinColumn()
+  @JoinColumn({ name: 'doctor_id' })
   doctor: Doctor;
 
-  @OneToOne(() => Appointment, (appointment) => appointment.prescription)
-  @JoinColumn()
+  @ManyToOne(() => Appointment, (appointment) => appointment.prescriptions, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'appointment_id' })
   appointment: Appointment;
 
   @ManyToMany(() => Medicine, (medicine) => medicine.prescriptions)

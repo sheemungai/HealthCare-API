@@ -10,6 +10,7 @@ import { Repository } from 'typeorm';
 import axios from 'axios';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { Appointment } from 'src/appointments/entities/appointment.entity';
+import { Doctor } from 'src/doctors/entities/doctor.entity';
 
 @Injectable()
 export class PaymentsService {
@@ -18,18 +19,24 @@ export class PaymentsService {
     private readonly paymentRepository: Repository<Payment>,
     @InjectRepository(Appointment)
     private readonly appointmentRepository: Repository<Appointment>,
+    @InjectRepository(Doctor)
+    private readonly doctorRepository: Repository<Doctor>,
   ) {}
 
   async initializePayment(createPaymentDto: CreatePaymentDto) {
     try {
-      if (typeof createPaymentDto.amount !== 'number') {
-        throw new BadRequestException(
-          'Amount is required and must be a number',
+      const doctor = await this.doctorRepository.findOne({
+        where: { doctor_id: createPaymentDto.doctor_id },
+      });
+      if (!doctor) {
+        throw new NotFoundException(
+          `Doctor with ID ${createPaymentDto.doctor_id} not found`,
         );
       }
+
       const payload = {
         email: createPaymentDto.email,
-        amount: createPaymentDto.amount * 100, // Paystack expects amount in kobo
+        amount: doctor.consultation_fee * 100, // Paystack expects amount in kobo
         callback_url: createPaymentDto.callback_url,
       };
 
@@ -76,16 +83,10 @@ export class PaymentsService {
         throw new BadRequestException('Appointment not found');
       }
 
-      if (typeof createPaymentDto.amount !== 'number') {
-        throw new BadRequestException(
-          'Amount is required and must be a number',
-        );
-      }
-
       const payment = this.paymentRepository.create({
         patient_id: createPaymentDto.patient_id,
         status: paymentStatus.PENDING,
-        amount: createPaymentDto.amount / 100, // Paystack expects amount in kobo
+        amount: Number(doctor.consultation_fee) / 100,
         transaction_id: response.data.data.reference,
       });
 
@@ -107,7 +108,7 @@ export class PaymentsService {
 
   //payment verification
 
-  async verifyPayment(reference: string) {
+  async verifyPayment(appointment_id: number) {
     try {
       interface PaystackVerifyResponse {
         status: boolean;
@@ -118,9 +119,20 @@ export class PaymentsService {
         };
         message?: string;
       }
-
+      const appointmentPayment = await this.appointmentRepository.findOne({
+        where: { appointment_id },
+        relations: { payment: true },
+      });
+      if (!appointmentPayment) {
+        throw new NotFoundException('Appointment not found');
+      }
+      if (!appointmentPayment.payment) {
+        throw new NotFoundException(
+          'Payment record not found for this appointment',
+        );
+      }
       const response = await axios.get<PaystackVerifyResponse>(
-        `https://api.paystack.co/transaction/verify/${reference}`,
+        `https://api.paystack.co/transaction/verify/${appointmentPayment.payment.transaction_id}`,
         {
           headers: {
             Authorization: `Bearer sk_test_d3b4382f60bbc3fbd49bd75eb956378dace11302`,
@@ -134,7 +146,7 @@ export class PaymentsService {
       }
 
       const payment = await this.paymentRepository.findOne({
-        where: { transaction_id: reference },
+        where: { transaction_id: appointmentPayment.payment.transaction_id },
       });
 
       if (!payment) {
