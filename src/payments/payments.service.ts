@@ -82,7 +82,8 @@ export class PaymentsService {
       if (!appointment) {
         throw new BadRequestException('Appointment not found');
       }
-
+      appointment.payment_status = paymentStatus.PENDING;
+      await this.appointmentRepository.save(appointment);
       const payment = this.paymentRepository.create({
         patient_id: createPaymentDto.patient_id,
         status: paymentStatus.PENDING,

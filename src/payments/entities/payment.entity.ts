@@ -15,6 +15,7 @@ export enum paymentStatus {
   PENDING = 'pending',
   COMPLETED = 'completed',
   FAILED = 'failed',
+  UNPAID = 'unpaid',
 }
 
 @Entity('payments')
@@ -40,7 +41,7 @@ export class Payment {
   @Column()
   amount: number;
 
-  @Column({ type: 'enum', enum: paymentStatus, default: paymentStatus.PENDING })
+  @Column({ type: 'enum', enum: paymentStatus, default: paymentStatus.UNPAID })
   status: paymentStatus;
 
   @Column({ nullable: true })

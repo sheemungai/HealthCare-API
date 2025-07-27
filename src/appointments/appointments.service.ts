@@ -61,7 +61,7 @@ export class AppointmentsService {
       ...createAppointmentDto,
       patient,
       doctor,
-      payment_status: paymentStatus.PENDING, // Default payment status
+      payment_status: paymentStatus.UNPAID, // Default payment status
       join_url: zoomMeeting.join_url, // Store the Zoom meeting URL
       start_url: zoomMeeting.start_url, // Store the Zoom start URL
     });
@@ -69,7 +69,7 @@ export class AppointmentsService {
     const savedAppointment = await this.appointmentRepository.save(appointment);
 
     const payment = this.paymentRepository.create({
-      patient_id: ,
+      // patient_id: ,
       payment_method: 'Mpesa',
       appointment: savedAppointment,
       amount: doctor.consultation_fee, // Assuming consultation fee is the amount

@@ -7,7 +7,6 @@ import {
   Delete,
   UseGuards,
   Post,
-  Query,
   BadRequestException,
 } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
@@ -37,9 +36,9 @@ export class PaymentsController {
     return this.paymentsService.initializePayment(createPaymentDto);
   }
 
-  @Get('callback')
+  @Get('callback/:reference')
   @ApiOperation({ summary: 'Handle Paystack/M-PESA callback (after payment)' })
-  async handlePaymentCallback(@Query('reference') reference: number) {
+  async handlePaymentCallback(@Param('reference') reference: number) {
     if (!reference) {
       throw new BadRequestException('Missing payment reference in callback');
     }
