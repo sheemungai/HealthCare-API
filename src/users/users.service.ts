@@ -151,7 +151,7 @@ export class UsersService {
       await this.doctorRepository.update(
         { user: { user_id: id } },
         {
-          name: updateUserDto.name,
+          doctor_name: updateUserDto.name,
           specialization: updateUserDto.specialization,
           license_number: updateUserDto.license_number,
           availability: updateUserDto.availability,

@@ -1,4 +1,5 @@
 import { Appointment } from 'src/appointments/entities/appointment.entity';
+// import { Dashboard } from 'src/dashboard/entities/dashboard.entity';
 import { Prescription } from 'src/prescriptions/entities/prescription.entity';
 import { Record } from 'src/records/entities/record.entity';
 import { User } from 'src/users/entities/user.entity';
@@ -9,6 +10,7 @@ import {
   OneToMany,
   OneToOne,
   JoinColumn,
+  // ManyToMany,
 } from 'typeorm';
 
 @Entity()
@@ -17,7 +19,7 @@ export class Doctor {
   doctor_id: number;
 
   @Column()
-  name: string;
+  doctor_name: string;
 
   @Column()
   email: string;
@@ -57,3 +59,6 @@ export class Doctor {
   @OneToMany(() => Record, (record) => record.doctor)
   records: Record[];
 }
+
+// @ManyToMany(() => Dashboard, (dashboard) => dashboard.doctors)
+// dashboards: Dashboard[];

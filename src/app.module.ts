@@ -16,6 +16,7 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { AtGuard } from './auth/guards';
 import { AiModule } from './aimodel/aimodel.module';
 import { ZoomModule } from './zoom/zoom.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { ZoomModule } from './zoom/zoom.module';
     AuthModule,
     ZoomModule,
     AiModule,
+    DashboardModule,
   ],
   controllers: [],
   providers: [{ provide: 'APP_GUARD', useClass: AtGuard }],
