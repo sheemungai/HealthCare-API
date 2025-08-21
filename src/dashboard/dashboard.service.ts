@@ -22,7 +22,7 @@ export class DashboardService {
   async findOne(id: number) {
     const dashboard = await this.dashboardRepository.findOne({
       where: { id },
-      relations: ['doctor'],
+      relations: ['doctor', 'appointment', 'records', 'record'],
     });
     if (!dashboard) {
       return 'Dashboard not found';
