@@ -1,14 +1,34 @@
-import { Appointment } from 'src/appointments/entities/appointment.entity';
-import { Doctor } from 'src/doctors/entities/doctor.entity';
-import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
-import { User } from 'src/users/entities/user.entity';
-import { Record } from 'src/records/entities/record.entity';
+import { IsArray, IsOptional, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
 
 export class CreateDashboardDto {
-  id: number;
-  doctors: Doctor[];
-  appointments: Appointment[];
-  records: Record[];
-  pharmacyOrders: PharmacyOrder[];
-  users: User[];
+  @IsOptional()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  doctorIds?: number[];
+
+  @IsOptional()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  appointmentIds?: number[];
+
+  @IsOptional()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  recordIds?: number[];
+
+  @IsOptional()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  pharmacyOrderIds?: number[];
+
+  @IsOptional()
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  userIds?: number[];
 }

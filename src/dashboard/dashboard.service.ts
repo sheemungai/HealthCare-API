@@ -1,4 +1,3 @@
-// dashboard.service.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDashboardDto } from './dto/create-dashboard.dto';
 import { UpdateDashboardDto } from './dto/update-dashboard.dto';
@@ -8,6 +7,8 @@ import { Dashboard } from './entities/dashboard.entity';
 import { Doctor } from 'src/doctors/entities/doctor.entity';
 import { Appointment } from 'src/appointments/entities/appointment.entity';
 import { Record } from 'src/records/entities/record.entity';
+import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
+import { User } from 'src/users/entities/user.entity';
 import { DashboardCardDto } from './dto/dashboard-card.dto';
 import { DashboardDataDto } from './dto/dashboard-data.dto';
 
@@ -22,11 +23,12 @@ export class DashboardService {
     private appointmentRepository: Repository<Appointment>,
     @InjectRepository(Record)
     private recordRepository: Repository<Record>,
+    @InjectRepository(PharmacyOrder)
+    private pharmacyOrderRepository: Repository<PharmacyOrder>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
   ) {}
 
-  /**
-   * Create a new dashboard
-   */
   async create(createDashboardDto: CreateDashboardDto): Promise<Dashboard> {
     const dashboard = this.dashboardRepository.create();
 
@@ -36,7 +38,7 @@ export class DashboardService {
       createDashboardDto.doctorIds.length > 0
     ) {
       dashboard.doctors = await this.doctorRepository.findBy({
-        id: In(createDashboardDto.doctorIds),
+        doctor_id: In(createDashboardDto.doctorIds),
       });
     }
 
@@ -46,7 +48,7 @@ export class DashboardService {
       createDashboardDto.appointmentIds.length > 0
     ) {
       dashboard.appointments = await this.appointmentRepository.findBy({
-        id: In(createDashboardDto.appointmentIds),
+        appointment_id: In(createDashboardDto.appointmentIds),
       });
     }
 
@@ -56,29 +58,52 @@ export class DashboardService {
       createDashboardDto.recordIds.length > 0
     ) {
       dashboard.records = await this.recordRepository.findBy({
-        id: In(createDashboardDto.recordIds),
+        record_id: In(createDashboardDto.recordIds),
+      });
+    }
+
+    // Add pharmacy orders if provided
+    if (
+      createDashboardDto.pharmacyOrderIds &&
+      createDashboardDto.pharmacyOrderIds.length > 0
+    ) {
+      dashboard.pharmacyOrders = await this.pharmacyOrderRepository.findBy({
+        pharmacy_order_id: In(createDashboardDto.pharmacyOrderIds),
+      });
+    }
+
+    // Add users if provided
+    if (createDashboardDto.userIds && createDashboardDto.userIds.length > 0) {
+      dashboard.users = await this.userRepository.findBy({
+        user_id: In(createDashboardDto.userIds),
       });
     }
 
     return await this.dashboardRepository.save(dashboard);
   }
 
-  /**
-   * Get all dashboards
-   */
   async findAll(): Promise<Dashboard[]> {
     return await this.dashboardRepository.find({
-      relations: ['doctors', 'appointments', 'records'],
+      relations: [
+        'doctors',
+        'appointments',
+        'records',
+        'pharmacyOrders',
+        'users',
+      ],
     });
   }
 
-  /**
-   * Get a specific dashboard by ID
-   */
   async findOne(id: number): Promise<Dashboard> {
     const dashboard = await this.dashboardRepository.findOne({
       where: { id },
-      relations: ['doctors', 'appointments', 'records'],
+      relations: [
+        'doctors',
+        'appointments',
+        'records',
+        'pharmacyOrders',
+        'users',
+      ],
     });
 
     if (!dashboard) {
@@ -88,16 +113,19 @@ export class DashboardService {
     return dashboard;
   }
 
-  /**
-   * Update a dashboard
-   */
   async update(
     id: number,
     updateDashboardDto: UpdateDashboardDto,
   ): Promise<Dashboard> {
     const dashboard = await this.dashboardRepository.findOne({
       where: { id },
-      relations: ['doctors', 'appointments', 'records'],
+      relations: [
+        'doctors',
+        'appointments',
+        'records',
+        'pharmacyOrders',
+        'users',
+      ],
     });
 
     if (!dashboard) {
@@ -109,7 +137,7 @@ export class DashboardService {
       dashboard.doctors =
         updateDashboardDto.doctorIds.length > 0
           ? await this.doctorRepository.findBy({
-              id: In(updateDashboardDto.doctorIds),
+              doctor_id: In(updateDashboardDto.doctorIds),
             })
           : [];
     }
@@ -119,7 +147,7 @@ export class DashboardService {
       dashboard.appointments =
         updateDashboardDto.appointmentIds.length > 0
           ? await this.appointmentRepository.findBy({
-              id: In(updateDashboardDto.appointmentIds),
+              appointment_id: In(updateDashboardDto.appointmentIds),
             })
           : [];
     }
@@ -129,7 +157,27 @@ export class DashboardService {
       dashboard.records =
         updateDashboardDto.recordIds.length > 0
           ? await this.recordRepository.findBy({
-              id: In(updateDashboardDto.recordIds),
+              record_id: In(updateDashboardDto.recordIds),
+            })
+          : [];
+    }
+
+    // Update pharmacy orders if provided
+    if (updateDashboardDto.pharmacyOrderIds !== undefined) {
+      dashboard.pharmacyOrders =
+        updateDashboardDto.pharmacyOrderIds.length > 0
+          ? await this.pharmacyOrderRepository.findBy({
+              pharmacy_order_id: In(updateDashboardDto.pharmacyOrderIds),
+            })
+          : [];
+    }
+
+    // Update users if provided
+    if (updateDashboardDto.userIds !== undefined) {
+      dashboard.users =
+        updateDashboardDto.userIds.length > 0
+          ? await this.userRepository.findBy({
+              user_id: In(updateDashboardDto.userIds),
             })
           : [];
     }
@@ -137,9 +185,6 @@ export class DashboardService {
     return await this.dashboardRepository.save(dashboard);
   }
 
-  /**
-   * Delete a dashboard
-   */
   async remove(id: number): Promise<{ message: string }> {
     const dashboard = await this.dashboardRepository.findOne({
       where: { id },
@@ -153,220 +198,158 @@ export class DashboardService {
     return { message: 'Dashboard removed successfully' };
   }
 
-  /**
-   * Get complete dashboard data with cards and statistics
-   */
   async getDashboardData(id: number): Promise<DashboardDataDto> {
     const dashboard = await this.findOne(id);
-    const cards = await this.generateDashboardCards(dashboard);
+    const cards = this.generateDashboardCards(dashboard);
 
     const dashboardData: DashboardDataDto = {
       id: dashboard.id,
-      title: `Dashboard #${dashboard.id}`,
+      title: `Healthcare Dashboard #${dashboard.id}`,
       description: 'Your personalized medical dashboard',
       cards: cards,
       totalDoctors: dashboard.doctors?.length || 0,
       totalAppointments: dashboard.appointments?.length || 0,
       totalRecords: dashboard.records?.length || 0,
-      createdAt: dashboard.createdAt || new Date(),
-      updatedAt: dashboard.updatedAt || new Date(),
+      totalPharmacyOrders: dashboard.pharmacyOrders?.length || 0,
+      totalUsers: dashboard.users?.length || 0,
+      createdAt: dashboard.createdAt,
+      updatedAt: dashboard.updatedAt,
     };
 
     return dashboardData;
   }
 
-  /**
-   * Get only dashboard cards
-   */
   async getDashboardCards(id: number): Promise<DashboardCardDto[]> {
     const dashboard = await this.findOne(id);
     return this.generateDashboardCards(dashboard);
   }
 
-  /**
-   * Get dashboard statistics and summary
-   */
-  async getDashboardSummary(id: number) {
-    const dashboard = await this.findOne(id);
-
-    return {
-      id: dashboard.id,
-      summary: {
-        totalEntities:
-          (dashboard.doctors?.length || 0) +
-          (dashboard.appointments?.length || 0) +
-          (dashboard.records?.length || 0),
-        doctors: dashboard.doctors?.length || 0,
-        appointments: dashboard.appointments?.length || 0,
-        records: dashboard.records?.length || 0,
-      },
-      recentActivity: await this.getRecentActivity(dashboard),
-      quickActions: ['add-doctor', 'schedule-appointment', 'view-reports'],
-    };
-  }
-
-  /**
-   * Generate dashboard cards from entities
-   */
-  private async generateDashboardCards(
-    dashboard: Dashboard,
-  ): Promise<DashboardCardDto[]> {
+  private generateDashboardCards(dashboard: Dashboard): DashboardCardDto[] {
     const cards: DashboardCardDto[] = [];
 
     // Add doctor cards
-    if (dashboard.doctors && dashboard.doctors.length > 0) {
+    if (dashboard.doctors?.length > 0) {
       dashboard.doctors.forEach((doctor) => {
         cards.push(this.mapDoctorToCard(doctor));
       });
     }
 
     // Add appointment cards
-    if (dashboard.appointments && dashboard.appointments.length > 0) {
+    if (dashboard.appointments?.length > 0) {
       dashboard.appointments.forEach((appointment) => {
         cards.push(this.mapAppointmentToCard(appointment));
       });
     }
 
     // Add record cards
-    if (dashboard.records && dashboard.records.length > 0) {
+    if (dashboard.records?.length > 0) {
       dashboard.records.forEach((record) => {
         cards.push(this.mapRecordToCard(record));
+      });
+    }
+
+    // Add pharmacy order cards
+    if (dashboard.pharmacyOrders?.length > 0) {
+      dashboard.pharmacyOrders.forEach((order) => {
+        cards.push(this.mapPharmacyOrderToCard(order));
+      });
+    }
+
+    // Add user cards
+    if (dashboard.users?.length > 0) {
+      dashboard.users.forEach((user) => {
+        cards.push(this.mapUserToCard(user));
       });
     }
 
     return cards;
   }
 
-  /**
-   * Get recent activity for the dashboard
-   */
-  private async getRecentActivity(dashboard: Dashboard) {
-    const activities = [];
-
-    if (dashboard.doctors && dashboard.doctors.length > 0) {
-      activities.push({
-        type: 'doctor_added',
-        count: dashboard.doctors.length,
-        message: `${dashboard.doctors.length} doctors in dashboard`,
-        timestamp: new Date(),
-      });
-    }
-
-    if (dashboard.appointments && dashboard.appointments.length > 0) {
-      activities.push({
-        type: 'appointment_scheduled',
-        count: dashboard.appointments.length,
-        message: `${dashboard.appointments.length} appointments scheduled`,
-        timestamp: new Date(),
-      });
-    }
-
-    if (dashboard.records && dashboard.records.length > 0) {
-      activities.push({
-        type: 'record_created',
-        count: dashboard.records.length,
-        message: `${dashboard.records.length} medical records available`,
-        timestamp: new Date(),
-      });
-    }
-
-    return activities;
-  }
-
-  /**
-   * Map Doctor entity to Dashboard Card
-   */
   private mapDoctorToCard(doctor: Doctor): DashboardCardDto {
     return {
-      id: doctor.id,
-      title: `${doctor.firstName} ${doctor.lastName}`,
-      subtitle: doctor.specialization,
-      description: doctor.bio,
-      imageUrl: doctor.profilePicture,
-      stats: {
-        experience: `${doctor.yearsOfExperience} years`,
-        rating: doctor.rating,
-        patients: doctor.patientCount,
-      },
+      id: doctor.doctor_id,
+      title: `Dr. ${doctor.doctor_name}`,
+      // subtitle: doctor.specialization,
+      // description: `${doctor.experience_years} years experience`,
+      // stats: {
+      //   experience: `${doctor.experience_years} years`,
+      //   fee: `$${doctor.consultation_fee}`,
+      //   specialization: doctor.specialization,
+      // },
       actions: ['view-profile', 'book-appointment', 'contact'],
       type: 'doctor',
       entity: doctor,
     };
   }
 
-  /**
-   * Map Appointment entity to Dashboard Card
-   */
   private mapAppointmentToCard(appointment: Appointment): DashboardCardDto {
     return {
-      id: appointment.id,
-      title: `Appointment with Dr. ${appointment.doctor?.lastName}`,
-      subtitle: new Date(appointment.appointmentDate).toLocaleDateString(),
-      description: appointment.reason,
-      stats: {
-        status: appointment.status,
-        duration: appointment.duration,
-        patient: appointment.patient?.firstName,
-      },
+      id: appointment.appointment_id,
+      title: `Appointment`,
+      // subtitle: new Date(appointment.appointment_time).toLocaleDateString(),
+      // description: appointment.reason,
+      // stats: {
+      //   status: appointment.payment_status,
+      //   time: new Date(appointment.appointment_time).toLocaleTimeString(),
+      //   doctor: appointment.doctor?.name,
+      // },
       actions: ['reschedule', 'cancel', 'view-details'],
       type: 'appointment',
       entity: appointment,
     };
   }
 
-  /**
-   * Map Record entity to Dashboard Card
-   */
   private mapRecordToCard(record: Record): DashboardCardDto {
     return {
-      id: record.id,
-      title: `Medical Record - ${record.recordType}`,
-      subtitle: new Date(record.date).toLocaleDateString(),
-      description:
-        record.notes?.substring(0, 100) +
-        (record.notes?.length > 100 ? '...' : ''),
-      stats: {
-        doctor: record.doctor?.lastName,
-        patient: record.patient?.firstName,
-        type: record.recordType,
-      },
+      id: record.record_id,
+      title: `Medical Record`,
+      // subtitle: new Date(record.date_created).toLocaleDateString(),
+      // description:
+      //   record.diagnosis?.substring(0, 100) +
+      //   (record.diagnosis?.length > 100 ? '...' : ''),
+      // stats: {
+      //   doctor: record.doctor?.name,
+      //   patient: record.patient?.user?.name,
+      //   type: 'Medical Record',
+      // },
       actions: ['view-details', 'download', 'share'],
       type: 'record',
       entity: record,
     };
   }
 
-  /**
-   * Search dashboards by content
-   */
-  async searchDashboards(query: string): Promise<Dashboard[]> {
-    const dashboards = await this.findAll();
+  private mapPharmacyOrderToCard(order: PharmacyOrder): DashboardCardDto {
+    return {
+      id: order.pharmacy_order_id,
+      title: `Pharmacy Order #${order.pharmacy_order_id}`,
+      // subtitle: new Date(
+      //   order.pharmacy_order_date,
+      // ).toLocaleDateString(),
+      // description: `Order total: $${order.total_amount}`,
+      // stats: {
+      //   status: order.order_status,
+      //   total: `$${order.total_amount}`,
+      //   items: 'Multiple items',
+      // },
+      actions: ['view-details', 'track-order', 'reorder'],
+      type: 'pharmacy-order',
+      entity: order,
+    };
+  }
 
-    return dashboards.filter((dashboard) => {
-      // Search in doctors
-      const doctorMatch = dashboard.doctors?.some(
-        (doctor) =>
-          `${doctor.firstName} ${doctor.lastName}`
-            .toLowerCase()
-            .includes(query.toLowerCase()) ||
-          doctor.specialization.toLowerCase().includes(query.toLowerCase()),
-      );
-
-      // Search in appointments
-      const appointmentMatch = dashboard.appointments?.some(
-        (appointment) =>
-          appointment.reason.toLowerCase().includes(query.toLowerCase()) ||
-          appointment.status.toLowerCase().includes(query.toLowerCase()),
-      );
-
-      // Search in records
-      const recordMatch = dashboard.records?.some(
-        (record) =>
-          record.recordType.toLowerCase().includes(query.toLowerCase()) ||
-          record.notes.toLowerCase().includes(query.toLowerCase()),
-      );
-
-      return doctorMatch || appointmentMatch || recordMatch;
-    });
+  private mapUserToCard(user: User): DashboardCardDto {
+    return {
+      id: user.user_id,
+      title: user.name,
+      // subtitle: user.email,
+      // description: `Role: ${user.role}`,
+      // stats: {
+      //   role: user.role,
+      //   joined: new Date(user.date_created).toLocaleDateString(),
+      // },
+      actions: ['view-profile', 'edit-profile', 'contact'],
+      type: 'user',
+      entity: user,
+    };
   }
 }

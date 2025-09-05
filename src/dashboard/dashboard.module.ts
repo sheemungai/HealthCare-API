@@ -2,25 +2,26 @@ import { Module } from '@nestjs/common';
 import { DashboardService } from './dashboard.service';
 import { DashboardController } from './dashboard.controller';
 import { Dashboard } from './entities/dashboard.entity';
-import { DoctorsModule } from 'src/doctors/doctors.module';
+import { Doctor } from 'src/doctors/entities/doctor.entity';
+import { Appointment } from 'src/appointments/entities/appointment.entity';
+import { Record } from 'src/records/entities/record.entity';
+import { PharmacyOrder } from 'src/pharmacy_orders/entities/pharmacy-order.entity';
+import { User } from 'src/users/entities/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppointmentsModule } from 'src/appointments/appointments.module';
-import { RecordsModule } from 'src/records/records.module';
-import { PatientsModule } from 'src/patients/patients.module';
-import { UsersModule } from 'src/users/users.module';
-import { PharmacyOrdersModule } from 'src/pharmacy_orders/pharmacy-orders.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Dashboard]),
-    DoctorsModule,
-    AppointmentsModule,
-    RecordsModule,
-    PatientsModule,
-    UsersModule,
-    PharmacyOrdersModule,
+    TypeOrmModule.forFeature([
+      Dashboard,
+      Doctor,
+      Appointment,
+      Record,
+      PharmacyOrder,
+      User,
+    ]),
   ],
   controllers: [DashboardController],
   providers: [DashboardService],
+  exports: [DashboardService],
 })
 export class DashboardModule {}
